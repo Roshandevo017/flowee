@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>பூ மார்ட் - தயாரிப்பு நிர்வாகம்</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{
+  colors:{primary:"#059669","background-light":"#f0fdf4","background-dark":"#0a1a12","surface-light":"#ffffff","surface-dark":"#111d16"},
+  fontFamily:{display:["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"]}
+}}}
+</script>
+<style>
+body{font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif;}
+.glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.5);}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px;transition:all 0.15s;color:#475569;}
+.sidebar-link:hover,.sidebar-link.active{background:rgba(5,150,105,0.12);color:#059669;}
+#modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+#modal.open{display:flex;}
+#toast{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:12px;font-weight:700;font-size:13px;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+#toast.show{transform:translateX(0);}
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen font-display">
+<div id="toast"></div>
+
+<!-- Add/Edit Modal -->
+<div id="modal">
+  <div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="text-lg font-extrabold" id="modalTitle">தயாரிப்பு சேர்க்கவும்</h3>
+      <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <form id="productForm" class="space-y-4">
+      <input type="hidden" id="editId"/>
+      <div>
+        <label class="block text-sm font-bold mb-1.5">தயாரிப்பு பெயர்</label>
+        <input id="pName" type="text" placeholder="உதா: ரோஜா மாலை" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm" required/>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-bold mb-1.5">விலை (₹)</label>
+          <input id="pPrice" type="number" placeholder="150" min="1" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm" required/>
+        </div>
+        <div>
+          <label class="block text-sm font-bold mb-1.5">இருப்பு</label>
+          <input id="pStock" type="number" placeholder="50" min="0" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm" required/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-1.5">வகை</label>
+        <select id="pCategory" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm" required>
+          <option value="">தேர்வு செய்யவும்</option>
+          <option value="jasmine">மல்லிகை</option>
+          <option value="rose">ரோஜா</option>
+          <option value="garland">மாலை</option>
+          <option value="loose">தனி பூக்கள்</option>
+          <option value="pooja">பூஜை பூக்கள்</option>
+          <option value="decoration">அலங்காரம்</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-1.5">அலகு</label>
+        <select id="pUnit" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
+          <option value="kg">கிலோ</option>
+          <option value="bunch">கட்டு</option>
+          <option value="piece">எண்ணிக்கை</option>
+          <option value="meter">மீட்டர்</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-1.5">படம் URL (விரும்பினால்)</label>
+        <input id="pImage" type="url" placeholder="https://example.com/image.jpg" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"/>
+      </div>
+      <div class="flex items-center gap-3">
+        <input type="checkbox" id="pAvailable" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-400"/>
+        <label for="pAvailable" class="text-sm font-semibold">இப்போது கிடைக்கும்</label>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="closeModal()" class="flex-1 h-11 rounded-xl border border-slate-200 font-bold text-sm hover:bg-slate-50 transition">ரத்து செய்</button>
+        <button type="submit" class="flex-1 h-11 rounded-xl font-bold text-white text-sm transition" style="background:linear-gradient(135deg,#059669,#10b981);">சேமி</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="hidden md:flex flex-col w-64 glass border-r border-slate-200/70 sticky top-0 h-screen z-40 p-5">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#059669,#10b981)">
+        <span class="material-symbols-outlined text-white text-xl">storefront</span>
+      </div>
+      <div>
+        <p class="font-extrabold text-slate-800 text-sm" id="shopNameSidebar">பூக்கடை</p>
+        <p class="text-xs text-emerald-600 font-semibold">Vendor Portal</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 flex-1">
+      <a href="vendor_dashboard.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">dashboard</span>டாஷ்போர்டு</a>
+      <a href="vendor_orders.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">receipt_long</span>ஆர்டர்கள்</a>
+      <a href="vendor_products.html" class="sidebar-link active"><span class="material-symbols-outlined text-[20px]">inventory_2</span>தயாரிப்புகள்</a>
+      <a href="#" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">bar_chart</span>புள்ளிவிவரம்</a>
+    </nav>
+    <button onclick="logout()" class="sidebar-link text-red-500 hover:bg-red-50 mt-4">
+      <span class="material-symbols-outlined text-[20px]">logout</span>வெளியேறு
+    </button>
+  </aside>
+
+  <div class="flex-1 flex flex-col">
+    <header class="glass border-b border-slate-200/70 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+      <div>
+        <h1 class="text-xl font-extrabold">தயாரிப்பு நிர்வாகம்</h1>
+        <p class="text-xs text-slate-500" id="productCount">0 தயாரிப்புகள்</p>
+      </div>
+      <button onclick="openModal()" class="flex items-center gap-2 h-10 px-5 rounded-xl font-bold text-white text-sm shadow-lg transition hover:opacity-90" style="background:linear-gradient(135deg,#059669,#10b981);">
+        <span class="material-symbols-outlined text-[18px]">add</span>
+        புதியது சேர்
+      </button>
+    </header>
+
+    <main class="flex-1 p-6">
+      <!-- Search and filter -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <div class="relative flex-1">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[18px]">search</span>
+          <input id="searchInput" type="text" placeholder="தயாரிப்பு தேடவும்..." oninput="renderProducts()"
+            class="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"/>
+        </div>
+        <select id="categoryFilter" onchange="renderProducts()" class="h-11 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-semibold">
+          <option value="">அனைத்து வகை</option>
+          <option value="jasmine">மல்லிகை</option>
+          <option value="rose">ரோஜா</option>
+          <option value="garland">மாலை</option>
+          <option value="loose">தனி பூக்கள்</option>
+          <option value="pooja">பூஜை பூக்கள்</option>
+          <option value="decoration">அலங்காரம்</option>
+        </select>
+      </div>
+
+      <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <!-- Loaded by JS -->
+      </div>
+    </main>
+  </div>
+</div>
+
+<nav class="fixed bottom-0 left-0 right-0 md:hidden glass border-t border-slate-200 px-6 py-3 flex justify-between items-center z-50">
+  <a href="vendor_dashboard.html" class="flex flex-col items-center gap-0.5 text-slate-400"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="text-[10px] font-bold">டாஷ்</span></a>
+  <a href="vendor_orders.html" class="flex flex-col items-center gap-0.5 text-slate-400"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="text-[10px] font-bold">ஆர்டர்கள்</span></a>
+  <a href="vendor_products.html" class="flex flex-col items-center gap-0.5 text-emerald-600"><span class="material-symbols-outlined text-[22px]">inventory_2</span><span class="text-[10px] font-bold">தயாரிப்பு</span></a>
+  <a href="#" onclick="logout()" class="flex flex-col items-center gap-0.5 text-slate-400"><span class="material-symbols-outlined text-[22px]">logout</span><span class="text-[10px] font-bold">வெளி</span></a>
+</nav>
+
+<script>
+if(!localStorage.getItem("vendor_logged_in")) window.location.href="vendor_login.html";
+
+const vendor=JSON.parse(localStorage.getItem("vendor_data")||"{}");
+document.getElementById("shopNameSidebar").textContent=vendor.name||"பூக்கடை";
+
+const categoryLabels={jasmine:"மல்லிகை",rose:"ரோஜா",garland:"மாலை",loose:"தனி பூக்கள்",pooja:"பூஜை பூக்கள்",decoration:"அலங்காரம்"};
+const unitLabels={kg:"கிலோ",bunch:"கட்டு",piece:"எண்ணிக்கை",meter:"மீட்டர்"};
+const flowerEmojis={jasmine:"🌼",rose:"🌹",garland:"💐",loose:"🌸",pooja:"🪷",decoration:"🌺"};
+
+// Load from localStorage (persisted)
+let products = JSON.parse(localStorage.getItem("vendor_products")||"null") || [
+  {id:"p1",name:"ரோஜா மாலை",category:"garland",price:140,stock:30,unit:"bunch",available:true},
+  {id:"p2",name:"மல்லிகை",category:"jasmine",price:120,stock:15,unit:"kg",available:true},
+  {id:"p3",name:"தாமரை",category:"loose",price:70,stock:50,unit:"piece",available:true},
+  {id:"p4",name:"ரோஜா கொத்து",category:"rose",price:250,stock:0,unit:"bunch",available:false},
+];
+
+function saveProducts(){ localStorage.setItem("vendor_products",JSON.stringify(products)); }
+
+function renderProducts(){
+  const search=document.getElementById("searchInput").value.toLowerCase();
+  const cat=document.getElementById("categoryFilter").value;
+  const filtered=products.filter(p=>
+    (!search||p.name.toLowerCase().includes(search))&&
+    (!cat||p.category===cat)
+  );
+  document.getElementById("productCount").textContent=products.length+" தயாரிப்புகள்";
+  const grid=document.getElementById("productsGrid");
+  grid.innerHTML="";
+  if(filtered.length===0){
+    grid.innerHTML=`<div class="col-span-full text-center py-12 text-slate-400"><span class="material-symbols-outlined text-5xl block mb-3">inventory_2</span><p class="font-bold">தயாரிப்புகள் இல்லை</p></div>`;
+    return;
+  }
+  filtered.forEach(p=>{
+    grid.innerHTML+=`
+    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition group">
+      <div class="h-32 flex items-center justify-center text-5xl ${p.available?'bg-emerald-50':'bg-slate-100'}">${flowerEmojis[p.category]||"🌸"}</div>
+      <div class="p-4">
+        <div class="flex items-start justify-between mb-1">
+          <h3 class="font-extrabold text-slate-800 text-sm">${p.name}</h3>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${p.available?'bg-emerald-100 text-emerald-700':'bg-slate-100 text-slate-500'}">${p.available?'உள்ளது':'இல்லை'}</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-2">${categoryLabels[p.category]||p.category} · ${unitLabels[p.unit]||p.unit}</p>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-lg font-extrabold text-slate-800">₹${p.price}</span>
+          <span class="text-xs font-semibold text-slate-500 ${p.stock===0?'text-red-500 font-bold':''}">இருப்பு: ${p.stock}</span>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="editProduct('${p.id}')" class="flex-1 h-9 rounded-xl text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition">திருத்து</button>
+          <button onclick="toggleAvail('${p.id}')" class="h-9 w-9 rounded-xl text-xs font-bold ${p.available?'bg-amber-50 text-amber-600 border border-amber-200':'bg-emerald-50 text-emerald-600 border border-emerald-200'} hover:opacity-80 transition flex items-center justify-center">
+            <span class="material-symbols-outlined text-[16px]">${p.available?'pause_circle':'play_circle'}</span>
+          </button>
+          <button onclick="deleteProduct('${p.id}')" class="h-9 w-9 rounded-xl bg-red-50 text-red-500 border border-red-200 hover:bg-red-100 transition flex items-center justify-center">
+            <span class="material-symbols-outlined text-[16px]">delete</span>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  });
+}
+
+function openModal(editData=null){
+  document.getElementById("productForm").reset();
+  document.getElementById("editId").value="";
+  document.getElementById("modalTitle").textContent="தயாரிப்பு சேர்க்கவும்";
+  document.getElementById("pAvailable").checked=true;
+  if(editData){
+    document.getElementById("modalTitle").textContent="தயாரிப்பு திருத்தவும்";
+    document.getElementById("editId").value=editData.id;
+    document.getElementById("pName").value=editData.name;
+    document.getElementById("pPrice").value=editData.price;
+    document.getElementById("pStock").value=editData.stock;
+    document.getElementById("pCategory").value=editData.category;
+    document.getElementById("pUnit").value=editData.unit;
+    document.getElementById("pAvailable").checked=editData.available;
+  }
+  document.getElementById("modal").classList.add("open");
+}
+
+function closeModal(){ document.getElementById("modal").classList.remove("open"); }
+
+function editProduct(id){
+  const p=products.find(p=>p.id===id);
+  if(p) openModal(p);
+}
+
+function toggleAvail(id){
+  const idx=products.findIndex(p=>p.id===id);
+  if(idx>-1){
+    products[idx].available=!products[idx].available;
+    saveProducts();
+    renderProducts();
+    showToast(products[idx].available?"கிடைக்கும் நிலை: உள்ளது":"கிடைக்கும் நிலை: இல்லை","success");
+  }
+}
+
+function deleteProduct(id){
+  if(!confirm("இந்த தயாரிப்பை நீக்கவா?")) return;
+  products=products.filter(p=>p.id!==id);
+  saveProducts();
+  renderProducts();
+  showToast("தயாரிப்பு நீக்கப்பட்டது","success");
+}
+
+document.getElementById("productForm").addEventListener("submit",(e)=>{
+  e.preventDefault();
+  const editId=document.getElementById("editId").value;
+  const prod={
+    id:editId||"p"+Date.now(),
+    name:document.getElementById("pName").value.trim(),
+    price:Number(document.getElementById("pPrice").value),
+    stock:Number(document.getElementById("pStock").value),
+    category:document.getElementById("pCategory").value,
+    unit:document.getElementById("pUnit").value,
+    image:document.getElementById("pImage").value||"",
+    available:document.getElementById("pAvailable").checked
+  };
+  if(editId){
+    const idx=products.findIndex(p=>p.id===editId);
+    if(idx>-1) products[idx]=prod;
+    showToast("தயாரிப்பு திருத்தப்பட்டது ✓","success");
+  } else {
+    products.unshift(prod);
+    showToast("தயாரிப்பு சேர்க்கப்பட்டது ✓","success");
+    // In prod: POST /api/vendor/products
+  }
+  saveProducts();
+  closeModal();
+  renderProducts();
+});
+
+function showToast(msg,type){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.style.background=type==="success"?"#059669":"#dc2626";
+  t.style.color="white";
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2500);
+}
+
+function logout(){localStorage.removeItem("vendor_logged_in");window.location.href="vendor_login.html";}
+
+// Close modal on backdrop click
+document.getElementById("modal").addEventListener("click",(e)=>{if(e.target===document.getElementById("modal")) closeModal();});
+
+renderProducts();
+</script>
+</body>
+</html>

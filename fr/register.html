@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>பூ மார்ட் - பதிவு செய்ய</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#6b4cf6",
+            secondary: "#ec4899",
+            "background-light": "#f6f5f8",
+            "background-dark": "#131022",
+          },
+          fontFamily: { display: ["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"] },
+          borderRadius: { DEFAULT: "1rem", lg: "1.5rem", xl: "2rem", full: "9999px" }
+        }
+      }
+    }
+  </script>
+  <style>
+    body{ font-family: "Plus Jakarta Sans","Noto Sans Tamil",sans-serif; }
+    .glass-panel{
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 10px 40px rgba(107,76,246,0.10);
+    }
+    .dark .glass-panel{
+      background: rgba(19,16,34,0.65);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen overflow-x-hidden">
+  <header class="sticky top-0 z-50 bg-white/70 dark:bg-black/20 backdrop-blur border-b border-slate-200/70 dark:border-white/10">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-2xl">local_florist</span>
+        </div>
+        <h1 class="text-xl font-extrabold tracking-tight">பூ மார்ட்</h1>
+      </a>
+      <a href="loginscr.html" class="text-sm font-bold text-primary hover:text-pink-500 transition-colors">உள்நுழைய</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10 flex flex-col items-center">
+    <div class="w-full max-w-[720px] glass-panel rounded-2xl p-6 sm:p-10 relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-56 h-56 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-28 -left-28 w-72 h-72 bg-pink-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center gap-4 mb-8">
+        <div class="size-14 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-3xl">person_add</span>
+        </div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">பதிவு செய்ய</h2>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">முதல் முறை பயன்படுத்துகிறீர்களா? சில விபரங்கள் மட்டும்.</p>
+        </div>
+      </div>
+
+      <!-- Stepper -->
+      <div class="flex items-center gap-3 mb-8">
+        <div id="stepDot1" class="flex items-center gap-2 text-primary font-bold">
+          <span class="size-8 rounded-full bg-primary/15 flex items-center justify-center">1</span>
+          <span class="text-sm">விபரங்கள்</span>
+        </div>
+        <div class="flex-1 h-[2px] bg-slate-200/70 dark:bg-slate-700/60"></div>
+        <div id="stepDot2" class="flex items-center gap-2 text-slate-400 font-bold">
+          <span class="size-8 rounded-full bg-slate-200/70 dark:bg-slate-700/60 flex items-center justify-center">2</span>
+          <span class="text-sm">OTP</span>
+        </div>
+        <div class="flex-1 h-[2px] bg-slate-200/70 dark:bg-slate-700/60"></div>
+        <div id="stepDot3" class="flex items-center gap-2 text-slate-400 font-bold">
+          <span class="size-8 rounded-full bg-slate-200/70 dark:bg-slate-700/60 flex items-center justify-center">3</span>
+          <span class="text-sm">முகவரி</span>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <section id="step1">
+        <form id="detailsForm" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">முதல் பெயர்</span>
+            <input id="firstName" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="உதா: ரோஷன்" required />
+          </label>
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">கடைசி பெயர்</span>
+            <input id="lastName" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="உதா: குமார்" required />
+          </label>
+
+          <label class="flex flex-col sm:col-span-2">
+            <span class="text-sm font-bold mb-2 ml-1">மொபைல் எண்</span>
+            <input id="phone" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="உதா: 9876543210" inputmode="numeric" required />
+            <span class="text-xs text-slate-500 dark:text-slate-400 mt-2 ml-1">OTP மூலம் சரிபார்க்கப்படும்.</span>
+          </label>
+
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">கடவுச்சொல்</span>
+            <input id="password" type="password" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="••••••••" required />
+          </label>
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">கடவுச்சொல் உறுதிப்படுத்த</span>
+            <input id="password2" type="password" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="••••••••" required />
+          </label>
+
+          <div class="sm:col-span-2 flex items-center justify-between mt-2">
+            <a href="loginscr.html" class="text-sm font-semibold text-slate-500 hover:text-primary">ஏற்கனவே கணக்கு இருக்கா? உள்நுழைய</a>
+            <button class="h-12 px-6 rounded-xl bg-gradient-to-r from-primary to-pink-500 text-white font-extrabold shadow-lg shadow-primary/25 active:scale-[0.98] transition" type="submit">
+              OTP அனுப்பு
+              <span class="material-symbols-outlined align-middle ml-1">arrow_forward</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- STEP 2 -->
+      <section id="step2" class="hidden">
+        <div class="rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 p-5">
+          <div class="flex items-start gap-3">
+            <div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined">sms</span>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-lg">OTP சரிபார்ப்பு</h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                <span id="otpPhoneText"></span> என்ற எண்ணிற்கு OTP அனுப்பப்பட்டது.
+                <span class="font-semibold">Demo OTP: 123456</span>
+              </p>
+            </div>
+          </div>
+
+          <form id="otpForm" class="mt-5 flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+            <label class="flex flex-col flex-1">
+              <span class="text-sm font-bold mb-2 ml-1">OTP</span>
+              <input id="otp" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="123456" inputmode="numeric" required />
+            </label>
+            <div class="flex gap-3">
+              <button type="button" id="resendBtn" class="h-12 px-5 rounded-xl bg-white/70 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 font-bold hover:border-primary/60 transition">
+                மீண்டும் அனுப்பு
+              </button>
+              <button type="submit" class="h-12 px-6 rounded-xl bg-gradient-to-r from-primary to-pink-500 text-white font-extrabold shadow-lg shadow-primary/25 active:scale-[0.98] transition">
+                சரிபார்த்து தொடர்க
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="flex items-center justify-between mt-6">
+          <button id="backTo1" class="text-sm font-bold text-slate-500 hover:text-primary">← திரும்ப</button>
+        </div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section id="step3" class="hidden">
+        <form id="addressForm" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <label class="flex flex-col sm:col-span-2">
+            <span class="text-sm font-bold mb-2 ml-1">முகவரி</span>
+            <textarea id="address" class="min-h-[110px] rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="வீட்டு எண், தெரு, பகுதி" required></textarea>
+          </label>
+
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">நகரம்</span>
+            <input id="city" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="மதுரை" required />
+          </label>
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">பின் கோடு</span>
+            <input id="pincode" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="625001" inputmode="numeric" required />
+          </label>
+
+          <div class="sm:col-span-2 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+            <button type="button" id="locBtn" class="h-12 px-5 rounded-xl bg-white/70 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 font-bold hover:border-primary/60 transition flex items-center gap-2">
+              <span class="material-symbols-outlined">my_location</span>
+              தற்போதைய இடத்தை பெறுக
+            </button>
+            <div class="text-xs text-slate-500 dark:text-slate-400">
+              <span id="locText">இடம்: பெறப்படவில்லை</span>
+            </div>
+          </div>
+
+          <div class="sm:col-span-2 flex items-center justify-between mt-2">
+            <button type="button" id="backTo2" class="text-sm font-bold text-slate-500 hover:text-primary">← திரும்ப</button>
+            <button class="h-12 px-6 rounded-xl bg-gradient-to-r from-primary to-pink-500 text-white font-extrabold shadow-lg shadow-primary/25 active:scale-[0.98] transition" type="submit">
+              கணக்கு உருவாக்கு
+              <span class="material-symbols-outlined align-middle ml-1">check_circle</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- SUCCESS -->
+      <section id="success" class="hidden">
+        <div class="rounded-2xl bg-emerald-50/70 dark:bg-emerald-900/20 border border-emerald-200/70 dark:border-emerald-400/20 p-6 flex items-start gap-4">
+          <div class="size-12 rounded-full bg-emerald-500/15 flex items-center justify-center text-emerald-600 dark:text-emerald-300">
+            <span class="material-symbols-outlined text-3xl">verified</span>
+          </div>
+          <div>
+            <h3 class="text-xl font-extrabold text-emerald-700 dark:text-emerald-200">பதிவு வெற்றிகரமாக முடிந்தது!</h3>
+            <p class="text-sm text-emerald-700/80 dark:text-emerald-200/80 mt-2">இப்போது உள்நுழையலாம்.</p>
+            <a href="loginscr.html" class="inline-flex mt-4 h-11 px-5 items-center justify-center rounded-xl bg-emerald-600 text-white font-extrabold hover:bg-emerald-700 transition">
+              உள்நுழைய செல்லவும்
+              <span class="material-symbols-outlined ml-1">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+<script>
+(function(){
+  const $ = (id)=>document.getElementById(id);
+
+  const step1=$("step1"), step2=$("step2"), step3=$("step3"), success=$("success");
+  const dot1=$("stepDot1"), dot2=$("stepDot2"), dot3=$("stepDot3");
+  let draft = { username:"", firstName:"", lastName:"", phone:"", password:"", address:{}, geo:null };
+
+  function setStep(n){
+    [step1,step2,step3,success].forEach(s=>s.classList.add("hidden"));
+    if(n===1) step1.classList.remove("hidden");
+    if(n===2) step2.classList.remove("hidden");
+    if(n===3) step3.classList.remove("hidden");
+    if(n===4) success.classList.remove("hidden");
+
+    // update dots
+    dot1.className = (n>=1) ? "flex items-center gap-2 text-primary font-bold" : "flex items-center gap-2 text-slate-400 font-bold";
+    dot2.className = (n>=2) ? "flex items-center gap-2 text-primary font-bold" : "flex items-center gap-2 text-slate-400 font-bold";
+    dot3.className = (n>=3) ? "flex items-center gap-2 text-primary font-bold" : "flex items-center gap-2 text-slate-400 font-bold";
+    // dot circles colors
+    [dot1,dot2,dot3].forEach((d,idx)=>{
+      const s=d.querySelector("span");
+      if(!s) return;
+      if(n>=idx+1){
+        s.className="size-8 rounded-full bg-primary/15 flex items-center justify-center";
+      }else{
+        s.className="size-8 rounded-full bg-slate-200/70 dark:bg-slate-700/60 flex items-center justify-center";
+      }
+    });
+  }
+
+  function getUsers(){
+    try { return JSON.parse(localStorage.getItem("poomart_users") || "[]"); }
+    catch(e){ return []; }
+  }
+  function saveUsers(arr){
+    localStorage.setItem("poomart_users", JSON.stringify(arr));
+  }
+
+  $("detailsForm").addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const fn=$("firstName").value.trim();
+    const ln=$("lastName").value.trim();
+    const phone=$("phone").value.trim();
+    const pw=$("password").value;
+    const pw2=$("password2").value;
+
+    if(!fn || !ln || !phone || !pw || !pw2){
+      alert("அனைத்து புலங்களையும் நிரப்பவும்.");
+      return;
+    }
+    if(!/^[0-9]{10}$/.test(phone)){
+      alert("சரியான 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்.");
+      return;
+    }
+    if(pw.length < 4){
+      alert("கடவுச்சொல் குறைந்தது 4 எழுத்துகள் இருக்க வேண்டும்.");
+      return;
+    }
+    if(pw !== pw2){
+      alert("கடவுச்சொல் பொருந்தவில்லை.");
+      return;
+    }
+
+    // username can be phone for simplicity
+    draft.username = phone;
+    draft.firstName=fn;
+    draft.lastName=ln;
+    draft.phone=phone;
+    draft.password=pw;
+
+    // check existing user
+    const users=getUsers();
+    if(users.some(u=>u.phone===phone)){
+      alert("இந்த எண் ஏற்கனவே பதிவு செய்யப்பட்டுள்ளது. உள்நுழைய முயலவும்.");
+      window.location.href="home.html";
+      return;
+    }
+
+    $("otpPhoneText").textContent = "+91 " + phone;
+    setStep(2);
+  });
+
+  $("otpForm").addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const otp=$("otp").value.trim();
+    if(otp !== "123456"){
+      alert("OTP தவறு. Demo OTP: 123456");
+      return;
+    }
+    setStep(3);
+  });
+
+  $("resendBtn").addEventListener("click",()=>{
+    alert("OTP மீண்டும் அனுப்பப்பட்டது. Demo OTP: 123456");
+  });
+
+  $("backTo1").addEventListener("click",()=>setStep(1));
+  $("backTo2").addEventListener("click",()=>setStep(2));
+
+  $("locBtn").addEventListener("click",()=>{
+    if(!navigator.geolocation){
+      alert("உங்கள் உலாவியில் GPS ஆதரவு இல்லை.");
+      return;
+    }
+    $("locText").textContent = "இடம்: பெறப்படுகிறது...";
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      draft.geo = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      $("locText").textContent = `இடம்: ${draft.geo.lat.toFixed(5)}, ${draft.geo.lng.toFixed(5)}`;
+    },()=>{
+      $("locText").textContent = "இடம்: பெறப்படவில்லை";
+      alert("இடத்தை பெற முடியவில்லை. கைமுறையாக முகவரி கொடுக்கலாம்.");
+    },{ enableHighAccuracy:true, timeout:8000 });
+  });
+
+  $("addressForm").addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const address=$("address").value.trim();
+    const city=$("city").value.trim();
+    const pincode=$("pincode").value.trim();
+    if(!address || !city || !pincode){
+      alert("முகவரி விவரங்களை நிரப்பவும்.");
+      return;
+    }
+    if(!/^[0-9]{6}$/.test(pincode)){
+      alert("சரியான 6 இலக்க பின் கோடு உள்ளிடவும்.");
+      return;
+    }
+
+    draft.address = { address, city, pincode };
+
+    const users=getUsers();
+    users.push({
+      id: "U" + Date.now(),
+      username: draft.username,
+      firstName: draft.firstName,
+      lastName: draft.lastName,
+      phone: draft.phone,
+      password: draft.password,
+      address: draft.address,
+      geo: draft.geo
+    });
+    saveUsers(users);
+
+    setStep(4);
+
+    // Auto redirect to login after 2 seconds
+    setTimeout(()=>{ window.location.href="home.html"; }, 1800);
+  });
+
+  setStep(1);
+})();
+</script>
+</body>
+</html>

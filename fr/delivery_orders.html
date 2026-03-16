@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>பூ மார்ட் - டெலிவரி ஆர்டர்கள்</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<!-- Leaflet.js for live map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{
+  colors:{primary:"#2563eb","background-light":"#eff6ff","background-dark":"#0a0f1a","surface-light":"#ffffff","surface-dark":"#0f172a"},
+  fontFamily:{display:["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"]}
+}}}
+</script>
+<style>
+body{font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif;}
+.glass{background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.5);}
+#map{height:280px;border-radius:16px;z-index:1;}
+.order-card{transition:transform 0.15s,box-shadow 0.15s;}
+.order-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,99,235,0.12);}
+#toast{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:12px;font-weight:700;font-size:13px;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+#toast.show{transform:translateX(0);}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;font-weight:700;font-size:11px;}
+.pulse-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulseDot 1.5s ease-in-out infinite;}
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:0.6;}}
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen font-display">
+<div id="toast"></div>
+
+<!-- Header -->
+<header class="glass border-b border-slate-200/70 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+  <div class="flex items-center gap-3">
+    <a href="delivery_login.html" class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 hover:bg-blue-100 transition">
+      <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+    </a>
+    <div>
+      <h1 class="font-extrabold text-slate-800 text-base leading-tight">டெலிவரி ஆர்டர்கள்</h1>
+      <p class="text-xs text-slate-500" id="partnerName">—</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-2">
+    <!-- Online toggle -->
+    <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1.5">
+      <div class="pulse-dot"></div>
+      <span class="text-xs font-bold text-emerald-700">Online</span>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="onlineToggle" checked class="sr-only peer">
+        <div class="w-7 h-3.5 bg-slate-300 peer-checked:bg-emerald-500 rounded-full transition after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-2.5 after:h-2.5 after:bg-white after:rounded-full after:transition peer-checked:after:translate-x-3.5"></div>
+      </label>
+    </div>
+    <button onclick="logout()" class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100 transition">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
+    </button>
+  </div>
+</header>
+
+<!-- Stats bar -->
+<div class="px-4 py-3 grid grid-cols-3 gap-3">
+  <div class="bg-white dark:bg-surface-dark rounded-xl p-3 text-center border border-slate-100">
+    <p class="text-xl font-extrabold text-blue-600" id="assignedCount">0</p>
+    <p class="text-[10px] font-bold text-slate-500 uppercase">ஒதுக்கப்பட்டவை</p>
+  </div>
+  <div class="bg-white dark:bg-surface-dark rounded-xl p-3 text-center border border-slate-100">
+    <p class="text-xl font-extrabold text-emerald-600" id="deliveredCount">0</p>
+    <p class="text-[10px] font-bold text-slate-500 uppercase">வழங்கியவை</p>
+  </div>
+  <div class="bg-white dark:bg-surface-dark rounded-xl p-3 text-center border border-slate-100">
+    <p class="text-xl font-extrabold text-slate-800" id="earningsToday">₹0</p>
+    <p class="text-[10px] font-bold text-slate-500 uppercase">இன்று வருவாய்</p>
+  </div>
+</div>
+
+<!-- Live Map -->
+<div class="px-4 mb-4">
+  <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-100 p-3">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-blue-600 text-[18px]">my_location</span>
+        <span class="text-sm font-bold text-slate-700">உங்கள் தற்போதைய இடம்</span>
+      </div>
+      <button id="refreshLocation" class="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
+        <span class="material-symbols-outlined text-[14px]">refresh</span> புதுப்பி
+      </button>
+    </div>
+    <div id="locationBar" class="text-xs text-slate-500 mb-2 flex items-center gap-1">
+      <span class="material-symbols-outlined text-[14px] text-amber-500">hourglass_empty</span>
+      இடம் கண்டறிகிறது...
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+
+<!-- Orders list -->
+<div class="px-4 pb-24">
+  <h2 class="font-extrabold text-slate-800 mb-3">ஒதுக்கப்பட்ட ஆர்டர்கள்</h2>
+  <div id="ordersContainer" class="space-y-3"></div>
+</div>
+
+<script>
+if(!localStorage.getItem("delivery_logged_in")) window.location.href="delivery_login.html";
+
+const partner=JSON.parse(localStorage.getItem("delivery_data")||"{}");
+document.getElementById("partnerName").textContent=partner.name||"டெலிவரி பார்ட்னர்";
+
+// Mock orders
+let orders=[
+  {id:"ORD003",customer:"கார்த்திக்",phone:"9988776655",pickup:"ரோஷன் பூக்கடை, அண்ணா நகர்",dropoff:"8, ராஜாஜி நகர், கோவை",items:"தாமரை x5",amount:350,deliveryFee:40,status:"out_for_delivery",pickupLat:11.0168,pickupLng:76.9558,dropLat:11.0200,dropLng:76.9700},
+  {id:"ORD005",customer:"பாலமுருகன்",phone:"9765432100",pickup:"ரோஷன் பூக்கடை, அண்ணா நகர்",dropoff:"22, நேதாஜி தெரு, சேலம்",items:"ரோஜா கொத்து x1",amount:250,deliveryFee:35,status:"assigned",pickupLat:11.6643,pickupLng:78.1460,dropLat:11.6700,dropLng:78.1550},
+];
+
+let deliveredOrders=[];
+let userMarker=null, map=null;
+let userLat=null, userLng=null;
+
+// Init Leaflet map
+map=L.map("map",{zoomControl:true,attributionControl:false}).setView([11.0168,76.9558],13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(map);
+
+// Custom icons
+const bikeIcon=L.divIcon({html:`<div style="background:#2563eb;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3)"><span style="font-size:16px">🛵</span></div>`,iconSize:[32,32],iconAnchor:[16,16],className:""});
+const pickupIcon=L.divIcon({html:`<div style="background:#059669;border-radius:8px;padding:4px 6px;font-size:11px;font-weight:700;color:white;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.2)">📦 Pickup</div>`,iconSize:[70,26],iconAnchor:[35,13],className:""});
+const dropIcon=L.divIcon({html:`<div style="background:#dc2626;border-radius:8px;padding:4px 6px;font-size:11px;font-weight:700;color:white;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.2)">🏠 Drop</div>`,iconSize:[60,26],iconAnchor:[30,13],className:""});
+
+let orderMarkers=[];
+
+function clearOrderMarkers(){
+  orderMarkers.forEach(m=>map.removeLayer(m));
+  orderMarkers=[];
+}
+
+function showOrderOnMap(order){
+  clearOrderMarkers();
+  const pm=L.marker([order.pickupLat,order.pickupLng],{icon:pickupIcon}).addTo(map);
+  const dm=L.marker([order.dropLat,order.dropLng],{icon:dropIcon}).addTo(map);
+  orderMarkers.push(pm,dm);
+  // Draw route line
+  const line=L.polyline([[order.pickupLat,order.pickupLng],[order.dropLat,order.dropLng]],{color:"#2563eb",weight:3,dashArray:"6,6",opacity:0.7}).addTo(map);
+  orderMarkers.push(line);
+  map.fitBounds([[order.pickupLat,order.pickupLng],[order.dropLat,order.dropLng]],{padding:[30,30]});
+}
+
+// Live geolocation
+function getLiveLocation(){
+  if(!navigator.geolocation){
+    document.getElementById("locationBar").innerHTML=`<span class="material-symbols-outlined text-[14px] text-red-500">location_off</span> உலாவி GPS ஆதரிக்கவில்லை`;
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+      userLat=pos.coords.latitude;
+      userLng=pos.coords.longitude;
+      const acc=Math.round(pos.coords.accuracy);
+
+      // Reverse geocode using Nominatim (free, no API key)
+      fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json&accept-language=ta`)
+        .then(r=>r.json())
+        .then(data=>{
+          const address=data.display_name||`${userLat.toFixed(5)}, ${userLng.toFixed(5)}`;
+          document.getElementById("locationBar").innerHTML=
+            `<span class="material-symbols-outlined text-[14px] text-emerald-500">location_on</span>
+             <span class="truncate">${address.split(",").slice(0,3).join(", ")}</span>
+             <span class="ml-auto text-[10px] text-slate-400 shrink-0">±${acc}m</span>`;
+        })
+        .catch(()=>{
+          document.getElementById("locationBar").innerHTML=
+            `<span class="material-symbols-outlined text-[14px] text-emerald-500">location_on</span>
+             ${userLat.toFixed(5)}, ${userLng.toFixed(5)} <span class="ml-auto text-[10px] text-slate-400">±${acc}m</span>`;
+        });
+
+      // Update map
+      if(!userMarker){
+        userMarker=L.marker([userLat,userLng],{icon:bikeIcon}).addTo(map);
+        map.setView([userLat,userLng],15);
+      } else {
+        userMarker.setLatLng([userLat,userLng]);
+      }
+
+      // Send to backend: PUT /api/delivery/location {lat, lng, partner_id}
+      // In prod: fetch('/api/delivery/location', {method:'PUT', body: JSON.stringify({lat:userLat,lng:userLng})})
+    },
+    (err)=>{
+      let msg="இடம் கண்டறிய முடியவில்லை";
+      if(err.code===1) msg="இடம் அனுமதி மறுக்கப்பட்டது";
+      document.getElementById("locationBar").innerHTML=`<span class="material-symbols-outlined text-[14px] text-red-500">location_off</span> ${msg}`;
+    },
+    {enableHighAccuracy:true,timeout:10000}
+  );
+}
+
+document.getElementById("refreshLocation").addEventListener("click",getLiveLocation);
+
+// Watch position continuously
+let watchId=null;
+function startTracking(){
+  if(navigator.geolocation){
+    watchId=navigator.geolocation.watchPosition(
+      (pos)=>{
+        userLat=pos.coords.latitude;
+        userLng=pos.coords.longitude;
+        if(userMarker) userMarker.setLatLng([userLat,userLng]);
+      },
+      null,
+      {enableHighAccuracy:true,maximumAge:5000}
+    );
+  }
+}
+
+document.getElementById("onlineToggle").addEventListener("change",(e)=>{
+  if(e.target.checked){
+    startTracking();
+    getLiveLocation();
+    showToast("Online - GPS கண்காணிப்பு தொடங்கியது 🛵","success");
+  } else {
+    if(watchId) navigator.geolocation.clearWatch(watchId);
+    showToast("Offline - கண்காணிப்பு நிறுத்தப்பட்டது","info");
+  }
+});
+
+function renderOrders(){
+  const assigned=orders.filter(o=>o.status==="assigned").length;
+  const delivered=deliveredOrders.length;
+  const earnings=deliveredOrders.reduce((a,o)=>a+o.deliveryFee,0);
+  document.getElementById("assignedCount").textContent=orders.filter(o=>["assigned","out_for_delivery"].includes(o.status)).length;
+  document.getElementById("deliveredCount").textContent=delivered;
+  document.getElementById("earningsToday").textContent="₹"+earnings;
+
+  const container=document.getElementById("ordersContainer");
+  const active=orders.filter(o=>["assigned","out_for_delivery"].includes(o.status));
+  container.innerHTML="";
+
+  if(active.length===0){
+    container.innerHTML=`<div class="text-center py-10 text-slate-400"><span class="material-symbols-outlined text-5xl block mb-3">two_wheeler</span><p class="font-bold">ஒதுக்கப்பட்ட ஆர்டர்கள் இல்லை</p></div>`;
+    return;
+  }
+
+  active.forEach(o=>{
+    const isPickup=o.status==="out_for_delivery";
+    container.innerHTML+=`
+    <div class="order-card bg-white dark:bg-surface-dark rounded-2xl border ${isPickup?'border-blue-200 ring-2 ring-blue-100':'border-slate-100'} p-4 shadow-sm">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <p class="font-extrabold text-slate-800 text-sm">${o.customer}</p>
+          <p class="text-xs text-slate-500">#${o.id} · <a href="tel:${o.phone}" class="text-blue-600 font-semibold">${o.phone}</a></p>
+        </div>
+        <span class="status-badge ${isPickup?'bg-blue-100 text-blue-700':'bg-amber-100 text-amber-700'}">
+          ${isPickup?'🛵 வழியில்':'⏳ ஒதுக்கப்பட்டது'}
+        </span>
+      </div>
+
+      <!-- Pickup & Drop -->
+      <div class="space-y-2 mb-3">
+        <div class="flex items-start gap-2">
+          <div class="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-emerald-600 text-[12px]">store</span>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold text-emerald-600 uppercase">எடுக்கும் இடம்</p>
+            <p class="text-xs text-slate-700 font-semibold">${o.pickup}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-2">
+          <div class="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-red-500 text-[12px]">home</span>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold text-red-500 uppercase">கொடுக்கும் இடம்</p>
+            <p class="text-xs text-slate-700 font-semibold">${o.dropoff}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amount & navigation -->
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+        <div>
+          <p class="text-xs text-slate-500">ஆர்டர் மதிப்பு: <span class="font-bold text-slate-700">₹${o.amount}</span></p>
+          <p class="text-xs text-emerald-600 font-bold">உங்கள் கட்டணம்: ₹${o.deliveryFee}</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="navigateTo(${o.dropLat},${o.dropLng})" class="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 transition flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">directions</span>
+          </button>
+          <button onclick="showOrderOnMap(${JSON.stringify(o).replace(/"/g,'&quot;')})" class="h-9 w-9 rounded-xl bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 transition flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">map</span>
+          </button>
+          ${!isPickup?`<button onclick="confirmPickup('${o.id}')" class="h-9 px-4 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition">Pickup ✓</button>`:""}
+          ${isPickup?`<button onclick="confirmDelivery('${o.id}')" class="h-9 px-4 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 transition">Delivered ✓</button>`:""}
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // Show first order on map
+  if(active.length>0) showOrderOnMap(active[0]);
+}
+
+function navigateTo(lat,lng){
+  // Opens Google Maps / device navigation
+  window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`,"_blank");
+}
+
+function confirmPickup(orderId){
+  const idx=orders.findIndex(o=>o.id===orderId);
+  if(idx>-1){
+    orders[idx].status="out_for_delivery";
+    renderOrders();
+    showToast("Pickup உறுதிப்படுத்தப்பட்டது 📦","success");
+    // In prod: PUT /api/delivery/orders/{orderId}/pickup
+  }
+}
+
+function confirmDelivery(orderId){
+  const idx=orders.findIndex(o=>o.id===orderId);
+  if(idx>-1){
+    deliveredOrders.push(orders[idx]);
+    orders.splice(idx,1);
+    renderOrders();
+    showToast("டெலிவரி முடிந்தது ✅","success");
+    // In prod: PUT /api/delivery/orders/{orderId}/delivered
+  }
+}
+
+function showToast(msg,type){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  const colors={success:"#059669",error:"#dc2626",info:"#2563eb"};
+  t.style.background=colors[type]||"#1e293b";
+  t.style.color="white";
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2500);
+}
+
+function logout(){
+  if(watchId) navigator.geolocation.clearWatch(watchId);
+  localStorage.removeItem("delivery_logged_in");
+  window.location.href="delivery_login.html";
+}
+
+// Init
+getLiveLocation();
+startTracking();
+renderOrders();
+</script>
+</body>
+</html>

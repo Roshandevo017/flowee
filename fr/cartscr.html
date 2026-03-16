@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="ta"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Flower Shop Cart</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6b4cf6",
+                        "background-light": "#f3f1f9", /* Lavender tinted background */
+                        "background-dark": "#131022",
+                        "surface-glass": "rgba(255, 255, 255, 0.7)",
+                        "surface-glass-dark": "rgba(19, 16, 34, 0.7)",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans Tamil", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "full": "9999px"},
+                    backdropBlur: {
+                        xs: '2px',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        .dark .glass-panel {
+            background: rgba(19, 16, 34, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 2px 10px rgba(107, 76, 246, 0.05);
+        }
+        .dark .glass-card {
+            background: rgba(30, 27, 46, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dcd6f7; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b4cf6; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+<!-- Navbar -->
+<nav class="sticky top-0 z-50 glass-panel w-full border-b border-white/50 dark:border-white/5">
+<div class="max-w-7xl mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<!-- Logo & Brand -->
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">local_florist</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight">Flower Shop</h2>
+</div>
+<!-- Navigation Links -->
+<div class="hidden md:flex items-center gap-8 bg-white/40 dark:bg-black/20 px-6 py-2 rounded-full border border-white/40 dark:border-white/5 backdrop-blur-sm">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-semibold transition-colors" href="home.html">முகப்பு</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-semibold transition-colors" href="shopdts.html">பூக்கள்</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-semibold transition-colors" href="support.html">பரிசுகள்</a>
+<a class="text-primary font-bold text-sm flex items-center gap-1" href="cartscr.html">
+<span>கார்ட்</span>
+<span class="size-1.5 rounded-full bg-primary"></span>
+</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-white dark:bg-slate-800 rounded-full h-10 px-4 border border-slate-200 dark:border-slate-700 focus-within:ring-2 focus-within:ring-primary/20 transition-all w-64">
+<span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+<input class="bg-transparent border-none text-sm w-full focus:ring-0 placeholder:text-slate-400 text-slate-800 dark:text-slate-200" placeholder="Search..." type="text"/>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors shadow-sm">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden ring-2 ring-white dark:ring-slate-800 shadow-sm" data-alt="User profile picture placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrDIytrhgxMiihw3cBxYTylvMWpEzocHFOxfJPhMdPtsVUyB_8BRaLaj_sLMw6QaGK6HikD8g08V30DxFr3EYQ6TM7gKR3kxR9sZ7742KaTGhPZF-fgmIjC-VoJ-5ffDUXQ3ui-a8wLm534SAPZT8yyMJFgibgQf0olSd2uvLjJvg-GxDuYwmmfMLjC4N5tFo68gomghyrBR689t-FpFCeuXlm_UmNkcjqgqg-KymH1k1I6nsY7FKpDgli1Z59ym1GGPl8_3nc5J2b'); background-size: cover; background-position: center;"></div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow flex justify-center py-8 px-4 md:px-8">
+<div class="w-full max-w-6xl flex flex-col lg:flex-row gap-8">
+<!-- Left Column: Cart Items -->
+<div class="flex-1 flex flex-col gap-6">
+<header class="pb-2">
+<h1 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl text-primary">shopping_bag</span>
+                        உங்கள் கார்ட்
+                    </h1>
+<p class="text-slate-500 dark:text-slate-400 mt-2 font-medium">3 பொருட்கள் உள்ளன</p>
+</header>
+<!-- Item 1 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 md:gap-6 items-center transition-all hover:shadow-lg hover:translate-y-[-2px] group">
+<div class="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-lg bg-slate-100 overflow-hidden relative shadow-inner">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Fresh jasmine flower garland" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCiNyO2yb4tI64lm5paCb6wa7L6cWxNIiShQpnEcCG-aQA2uysRqzi91lwmnXY_kDCbh11WUqCqUVid0xsMiLYvygiOLK0xK_Rxs2bXaaz3x8XkrZG5RHaEX-ocZH6RHRBgPkj7rWZCaqFKfgmDxThFoVWJ_dgNb8En_7jPvqoxBj7k3VV6cFfc9Tx1i7MiwVnaae-YkLKWvdDadMxVNatnyuw8WDEGKcguaxwVzW_kWbWdlKjrWLvfT87GqGLppTK8l90W4gDA_a9e');"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white truncate">மல்லிகை பூ மாலை</h3>
+<p class="text-primary text-sm font-medium bg-primary/10 inline-block px-2 py-0.5 rounded-full mt-1">புதிதாக பறிக்கப்பட்டது</p>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-4">500g பேக்</p>
+<div class="flex justify-between items-end">
+<div class="font-bold text-xl text-slate-900 dark:text-white">₹450 <span class="text-xs font-normal text-slate-400">/ அலகு</span></div>
+<div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-full p-1 border border-slate-200 dark:border-slate-700 shadow-inner">
+<button class="size-8 rounded-full bg-white dark:bg-slate-700 text-slate-600 dark:text-white hover:text-primary shadow-sm flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-sm font-bold">remove</span>
+</button>
+<input class="w-8 p-0 text-center bg-transparent border-none focus:ring-0 text-slate-900 dark:text-white font-bold" readonly="" type="text" value="2"/>
+<button class="size-8 rounded-full bg-primary text-white shadow-md shadow-primary/30 flex items-center justify-center transition-transform active:scale-90 hover:bg-primary/90">
+<span class="material-symbols-outlined text-sm font-bold">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 md:gap-6 items-center transition-all hover:shadow-lg hover:translate-y-[-2px] group">
+<div class="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-lg bg-slate-100 overflow-hidden relative shadow-inner">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Red rose bouquet" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCvmdrRHKC54N4-diCdG4gpUHQMd1ubna_1ML6CtNTGYNRQJH-GMnfEXT5dyR4omuWDF0cPsO_cMbDb3Ib3icNPOQTQBFAL4HyLGhfVaP1ac1VO7iCmZYroTps1xM27s_AmWVK46g51CIh9nmlghLnTgR5yMwNhVc1ynANjKXcY0Q0anu2KQVN-q0lVipegyMA_0wvfpimLVet9jieXWdZBhuruF5-oknK7ee6pWFyk9RUT4KheyGhvBwhMM2v34RvLQtxLnQSWRYGD');"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white truncate">ரோஜா பூங்கொத்து</h3>
+<p class="text-primary text-sm font-medium bg-primary/10 inline-block px-2 py-0.5 rounded-full mt-1">சிறப்பு பேக்கேஜிங்</p>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-4">12 ரோஜாக்கள்</p>
+<div class="flex justify-between items-end">
+<div class="font-bold text-xl text-slate-900 dark:text-white">₹800 <span class="text-xs font-normal text-slate-400">/ அலகு</span></div>
+<div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-full p-1 border border-slate-200 dark:border-slate-700 shadow-inner">
+<button class="size-8 rounded-full bg-white dark:bg-slate-700 text-slate-600 dark:text-white hover:text-primary shadow-sm flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-sm font-bold">remove</span>
+</button>
+<input class="w-8 p-0 text-center bg-transparent border-none focus:ring-0 text-slate-900 dark:text-white font-bold" readonly="" type="text" value="1"/>
+<button class="size-8 rounded-full bg-primary text-white shadow-md shadow-primary/30 flex items-center justify-center transition-transform active:scale-90 hover:bg-primary/90">
+<span class="material-symbols-outlined text-sm font-bold">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 md:gap-6 items-center transition-all hover:shadow-lg hover:translate-y-[-2px] group">
+<div class="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-lg bg-slate-100 overflow-hidden relative shadow-inner">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Marigold flowers loose" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBXmVuhwOG60T_eISMs05H65H9BVm-Y8LcyewPRi1UxSdmMY_OwSLJNWLbsSh3gwLL-ZXv37wgSYg7f4Jg5Oih15xTCVVsXdeQEWDfo138rq3qMP-BCCEbL8WVDoCxBuDiDjEy3Vrj6lQwzooubBb8qofVf9l9irdzVZoQHAjyMCkoxtWKkoDikI6KGgUpjPTeREHAECZmR7ZHj55JO49t0sxlZKLTk7axvB9gpZNWLWBRZViNrU97P3RCaQ0gm3YcUvJRmF1ce1Cnv');"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white truncate">சாமந்தி பூ</h3>
+<p class="text-primary text-sm font-medium bg-primary/10 inline-block px-2 py-0.5 rounded-full mt-1">பூஜைக்கு சிறந்தது</p>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-4">1 Kg</p>
+<div class="flex justify-between items-end">
+<div class="font-bold text-xl text-slate-900 dark:text-white">₹250 <span class="text-xs font-normal text-slate-400">/ அலகு</span></div>
+<div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-full p-1 border border-slate-200 dark:border-slate-700 shadow-inner">
+<button class="size-8 rounded-full bg-white dark:bg-slate-700 text-slate-600 dark:text-white hover:text-primary shadow-sm flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-sm font-bold">remove</span>
+</button>
+<input class="w-8 p-0 text-center bg-transparent border-none focus:ring-0 text-slate-900 dark:text-white font-bold" readonly="" type="text" value="1"/>
+<button class="size-8 rounded-full bg-primary text-white shadow-md shadow-primary/30 flex items-center justify-center transition-transform active:scale-90 hover:bg-primary/90">
+<span class="material-symbols-outlined text-sm font-bold">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary Sticky -->
+<div class="lg:w-[380px] shrink-0">
+<div class="sticky top-32 flex flex-col gap-6">
+<!-- Coupon Code -->
+<div class="glass-card rounded-xl p-4 flex gap-2">
+<div class="flex-1 flex items-center gap-2 bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary text-xl">sell</span>
+<input class="bg-transparent border-none text-sm w-full focus:ring-0 placeholder:text-slate-400 text-slate-700 dark:text-slate-200" placeholder="கூப்பன் குறியீடு" type="text"/>
+</div>
+<button class="bg-slate-900 dark:bg-slate-700 text-white dark:text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">பயன்படுத்து</button>
+</div>
+<!-- Bill Details -->
+<div class="glass-panel rounded-2xl p-6 shadow-xl shadow-primary/5">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6">கட்டண விவரங்கள்</h3>
+<div class="flex flex-col gap-4 mb-6 border-b border-dashed border-slate-300 dark:border-slate-700 pb-6">
+<div class="flex justify-between items-center">
+<span class="text-slate-600 dark:text-slate-400 text-sm">மொத்தம் (3 பொருட்கள்)</span>
+<span class="text-slate-900 dark:text-white font-semibold">₹1950</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-600 dark:text-slate-400 text-sm">தள்ளுபடி</span>
+<span class="text-green-600 font-semibold text-sm">-₹0</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-600 dark:text-slate-400 text-sm">டெலிவரி கட்டணம்</span>
+<span class="text-slate-900 dark:text-white font-semibold">₹50</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-600 dark:text-slate-400 text-sm">வரி (GST)</span>
+<span class="text-slate-900 dark:text-white font-semibold">₹18</span>
+</div>
+</div>
+<div class="flex justify-between items-center mb-8">
+<span class="text-slate-900 dark:text-white font-black text-xl">இறுதி தொகை</span>
+<span class="text-primary font-black text-2xl">₹2018</span>
+</div>
+<button onclick="window.location.href='ordertrack.html'" class="w-full h-14 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-xl shadow-[0_8px_20px_-6px_rgba(107,76,246,0.5)] hover:shadow-[0_12px_24px_-6px_rgba(107,76,246,0.6)] transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group overflow-hidden relative">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-xl"></div>
+<span class="relative z-10">ஆர்டர் செய்ய</span>
+<span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<div class="mt-4 flex items-center justify-center gap-2 text-xs text-slate-400">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                             பாதுகாப்பான பரிவர்த்தனை
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Decor (Optional visual flair) -->
+<div class="fixed bottom-0 left-0 w-full h-96 pointer-events-none -z-10 bg-gradient-to-t from-primary/5 to-transparent"></div>
+</body></html>

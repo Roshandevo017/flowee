@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>பூ மார்ட் - செலுத்துக</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{
+  colors:{primary:"#6b4cf6","background-light":"#f6f5f8","background-dark":"#131022","surface-light":"#ffffff","surface-dark":"#1e1b2e"},
+  fontFamily:{display:["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"]}
+}}}
+</script>
+<style>
+body{font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif;}
+.glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.5);}
+.step-line{flex:1;height:2px;background:#e2e8f0;}
+.step-line.done{background:#6b4cf6;}
+.payment-opt{border:2px solid #e2e8f0;border-radius:14px;padding:14px;cursor:pointer;transition:all 0.15s;}
+.payment-opt:hover{border-color:#6b4cf6;background:rgba(107,76,246,0.04);}
+.payment-opt.selected{border-color:#6b4cf6;background:rgba(107,76,246,0.06);}
+#toast{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:12px;font-weight:700;font-size:13px;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+#toast.show{transform:translateX(0);}
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen font-display">
+<div id="toast"></div>
+
+<!-- Header -->
+<header class="glass border-b border-slate-200/70 px-4 py-3 flex items-center gap-3 sticky top-0 z-30">
+  <a href="cartscr.html" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+  </a>
+  <h1 class="font-extrabold text-lg">செலுத்துக</h1>
+</header>
+
+<!-- Step indicator -->
+<div class="flex items-center px-6 py-4 gap-2">
+  <div class="flex flex-col items-center">
+    <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">1</div>
+    <span class="text-[10px] font-bold text-primary mt-1">முகவரி</span>
+  </div>
+  <div class="step-line done" id="line1"></div>
+  <div class="flex flex-col items-center">
+    <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold" id="step2">2</div>
+    <span class="text-[10px] font-bold text-slate-400 mt-1" id="step2Label">பணம்</span>
+  </div>
+  <div class="step-line" id="line2"></div>
+  <div class="flex flex-col items-center">
+    <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold" id="step3">3</div>
+    <span class="text-[10px] font-bold text-slate-400 mt-1">உறுதிப்படுத்து</span>
+  </div>
+</div>
+
+<div class="max-w-lg mx-auto px-4 pb-32">
+
+  <!-- Step 1: Address -->
+  <div id="stepAddress" class="space-y-4">
+    <h2 class="font-extrabold text-slate-800 text-lg">டெலிவரி முகவரி</h2>
+
+    <!-- Get live location button -->
+    <button id="getLocationBtn" onclick="getLiveAddress()"
+      class="w-full flex items-center gap-3 p-4 rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 transition">
+      <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary text-xl">my_location</span>
+      </div>
+      <div class="text-left">
+        <p class="font-bold text-primary text-sm">நேர்நிலை GPS இடம் பயன்படுத்தவும்</p>
+        <p class="text-xs text-slate-500" id="gpsStatus">உங்கள் தற்போதைய இடத்தை கண்டறியவும்</p>
+      </div>
+      <span class="material-symbols-outlined text-primary ml-auto">chevron_right</span>
+    </button>
+
+    <div class="flex items-center gap-3">
+      <div class="flex-1 h-px bg-slate-200"></div>
+      <span class="text-xs text-slate-400 font-semibold">அல்லது கைமுறையாக உள்ளிடவும்</span>
+      <div class="flex-1 h-px bg-slate-200"></div>
+    </div>
+
+    <div class="space-y-3">
+      <div>
+        <label class="block text-sm font-bold mb-1.5">பெயர்</label>
+        <input id="addrName" type="text" placeholder="முழு பெயர்"
+          class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm" required/>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-1.5">மொபைல்</label>
+        <input id="addrPhone" type="tel" placeholder="9876543210"
+          class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm" required/>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-1.5">முகவரி</label>
+        <textarea id="addrLine" rows="2" placeholder="வீடு எண், தெரு பெயர்..."
+          class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm resize-none" required></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-bold mb-1.5">நகரம்</label>
+          <input id="addrCity" type="text" placeholder="சென்னை"
+            class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm"/>
+        </div>
+        <div>
+          <label class="block text-sm font-bold mb-1.5">அஞ்சல் குறியீடு</label>
+          <input id="addrPin" type="text" placeholder="600001" maxlength="6"
+            class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-1.5">டெலிவரி நேரம்</label>
+        <select id="deliverySlot" class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm font-semibold">
+          <option value="asap">விரைவில் (30–45 நிமிடம்)</option>
+          <option value="morning">காலை 7–10</option>
+          <option value="afternoon">மாலை 3–6</option>
+          <option value="evening">இரவு 6–9</option>
+        </select>
+      </div>
+    </div>
+
+    <button onclick="goToPayment()" class="w-full h-13 py-4 rounded-xl font-extrabold text-white text-base shadow-lg transition active:scale-[0.98]"
+      style="background:linear-gradient(135deg,#6b4cf6,#ec4899);">
+      தொடரவும் →
+    </button>
+  </div>
+
+  <!-- Step 2: Payment -->
+  <div id="stepPayment" class="hidden space-y-4">
+    <h2 class="font-extrabold text-slate-800 text-lg">பணம் செலுத்தும் முறை</h2>
+
+    <div class="space-y-3" id="paymentOptions">
+      <div class="payment-opt selected" onclick="selectPayment('COD',this)">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-amber-600 text-xl">payments</span>
+          </div>
+          <div>
+            <p class="font-bold text-sm">பண வழங்கல் (COD)</p>
+            <p class="text-xs text-slate-500">டெலிவரி நேரத்தில் பணம் கொடுக்கவும்</p>
+          </div>
+          <span class="ml-auto material-symbols-outlined text-primary text-xl" id="codCheck">radio_button_checked</span>
+        </div>
+      </div>
+
+      <div class="payment-opt" onclick="selectPayment('UPI',this)">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-blue-600 text-xl">account_balance</span>
+          </div>
+          <div>
+            <p class="font-bold text-sm">UPI / QR Code</p>
+            <p class="text-xs text-slate-500">GPay, PhonePe, Paytm</p>
+          </div>
+          <span class="ml-auto material-symbols-outlined text-slate-300 text-xl" id="upiCheck">radio_button_unchecked</span>
+        </div>
+      </div>
+
+      <div class="payment-opt" onclick="selectPayment('Card',this)">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-purple-600 text-xl">credit_card</span>
+          </div>
+          <div>
+            <p class="font-bold text-sm">டெபிட் / கிரெடிட் கார்டு</p>
+            <p class="text-xs text-slate-500">Visa, Mastercard, RuPay</p>
+          </div>
+          <span class="ml-auto material-symbols-outlined text-slate-300 text-xl" id="cardCheck">radio_button_unchecked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order summary -->
+    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-100 p-4">
+      <h3 class="font-extrabold text-slate-800 mb-3">ஆர்டர் சுருக்கம்</h3>
+      <div id="orderSummaryItems" class="space-y-2 mb-3"></div>
+      <div class="border-t border-slate-100 pt-3 space-y-1">
+        <div class="flex justify-between text-sm"><span class="text-slate-600">துணை மொத்தம்</span><span class="font-bold" id="subTotal">₹0</span></div>
+        <div class="flex justify-between text-sm"><span class="text-slate-600">டெலிவரி கட்டணம்</span><span class="font-bold text-emerald-600">₹30</span></div>
+        <div class="flex justify-between font-extrabold text-base pt-1"><span>மொத்தம்</span><span class="text-primary" id="grandTotal">₹0</span></div>
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <button onclick="goBack()" class="flex-1 h-12 rounded-xl border border-slate-200 font-bold text-sm hover:bg-slate-50 transition">← முகவரி</button>
+      <button onclick="placeOrder()" class="flex-1 h-12 rounded-xl font-extrabold text-white text-sm shadow-lg transition active:scale-[0.98]"
+        style="background:linear-gradient(135deg,#6b4cf6,#ec4899);">
+        ஆர்டர் போடவும் →
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 3: Confirmation -->
+  <div id="stepConfirm" class="hidden text-center py-8 space-y-4">
+    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-4xl">✅</div>
+    <h2 class="text-2xl font-extrabold text-emerald-700">ஆர்டர் வெற்றி!</h2>
+    <p class="text-slate-600 text-sm">உங்கள் ஆர்டர் பதிவாகியுள்ளது. கடையிலிருந்து விரைவில் உறுதிப்படுத்தப்படும்.</p>
+    <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 text-left">
+      <p class="font-bold text-emerald-700 text-sm mb-2">ஆர்டர் விவரங்கள்</p>
+      <p class="text-sm"><span class="text-slate-500">ஆர்டர் ID:</span> <span class="font-bold" id="confirmOrderId">—</span></p>
+      <p class="text-sm"><span class="text-slate-500">மொத்தம்:</span> <span class="font-bold" id="confirmTotal">—</span></p>
+      <p class="text-sm"><span class="text-slate-500">கட்டண முறை:</span> <span class="font-bold" id="confirmPayment">—</span></p>
+    </div>
+    <a href="ordertrack.html" class="block w-full h-12 rounded-xl font-extrabold text-white text-sm flex items-center justify-center gap-2"
+      style="background:linear-gradient(135deg,#6b4cf6,#ec4899);">
+      <span class="material-symbols-outlined text-[18px]">local_shipping</span>
+      ஆர்டர் கண்காணிக்கவும்
+    </a>
+    <a href="home.html" class="block text-sm text-primary font-bold hover:underline">முகப்புக்கு திரும்பவும்</a>
+  </div>
+
+</div>
+
+<!-- Fixed order summary bottom bar (steps 1&2) -->
+<div id="bottomBar" class="fixed bottom-0 left-0 right-0 glass border-t border-slate-200 px-4 py-3 flex items-center justify-between max-w-lg mx-auto">
+  <div>
+    <p class="text-xs text-slate-500">மொத்தம் (டெலிவரி உட்பட)</p>
+    <p class="font-extrabold text-primary text-lg" id="bottomTotal">₹0</p>
+  </div>
+  <div class="flex items-center gap-2 text-xs text-slate-500">
+    <span class="material-symbols-outlined text-[16px] text-emerald-500">verified</span>
+    பாதுகாப்பான பணம்
+  </div>
+</div>
+
+<script>
+(function(){
+  let selectedPayment="COD";
+  let addressData={};
+  let cartItems=JSON.parse(localStorage.getItem("poomart_cart")||"[]");
+  const DELIVERY_FEE=30;
+
+  // Load cart
+  function calcSubTotal(){return cartItems.reduce((a,i)=>a+(i.price*i.qty),0);}
+
+  function updateTotals(){
+    const sub=calcSubTotal();
+    document.getElementById("subTotal").textContent="₹"+sub;
+    document.getElementById("grandTotal").textContent="₹"+(sub+DELIVERY_FEE);
+    document.getElementById("bottomTotal").textContent="₹"+(sub+DELIVERY_FEE);
+  }
+
+  // Pre-fill user data
+  const user=JSON.parse(localStorage.getItem("poomart_current_user")||"{}");
+  if(user.name) document.getElementById("addrName").value=user.name;
+  if(user.phone) document.getElementById("addrPhone").value=user.phone;
+
+  updateTotals();
+
+  window.getLiveAddress=function(){
+    const btn=document.getElementById("getLocationBtn");
+    const status=document.getElementById("gpsStatus");
+    status.textContent="இடம் கண்டறிகிறது...";
+    if(!navigator.geolocation){status.textContent="GPS ஆதரிக்கப்படவில்லை";return;}
+    navigator.geolocation.getCurrentPosition(
+      (pos)=>{
+        const {latitude:lat,longitude:lng}=pos.coords;
+        // Reverse geocode with Nominatim
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=ta`)
+          .then(r=>r.json())
+          .then(data=>{
+            const a=data.address||{};
+            const road=a.road||a.pedestrian||"";
+            const suburb=a.suburb||a.neighbourhood||"";
+            const city=a.city||a.town||a.village||"";
+            const pin=a.postcode||"";
+            document.getElementById("addrLine").value=[road,suburb].filter(Boolean).join(", ");
+            document.getElementById("addrCity").value=city;
+            document.getElementById("addrPin").value=pin;
+            status.textContent="✓ இடம் கண்டறியப்பட்டது: "+city;
+            btn.style.borderColor="#059669";
+            btn.style.background="rgba(5,150,105,0.06)";
+          })
+          .catch(()=>{
+            document.getElementById("addrLine").value=`${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+            status.textContent="✓ GPS கோ-ஆர்டினேட்: "+lat.toFixed(4)+", "+lng.toFixed(4);
+          });
+      },
+      (err)=>{
+        status.textContent=err.code===1?"அனுமதி மறுக்கப்பட்டது":"இடம் கண்டறிய முடியவில்லை";
+      },
+      {enableHighAccuracy:true,timeout:8000}
+    );
+  };
+
+  window.selectPayment=function(method, el){
+    selectedPayment=method;
+    document.querySelectorAll(".payment-opt").forEach(e=>e.classList.remove("selected"));
+    el.classList.add("selected");
+    document.getElementById("codCheck").textContent="radio_button_unchecked";
+    document.getElementById("upiCheck").textContent="radio_button_unchecked";
+    document.getElementById("cardCheck").textContent="radio_button_unchecked";
+    const checkId={COD:"codCheck",UPI:"upiCheck",Card:"cardCheck"}[method];
+    if(checkId) document.getElementById(checkId).textContent="radio_button_checked";
+    document.getElementById(checkId).classList.add("text-primary");
+  };
+
+  window.goToPayment=function(){
+    const name=document.getElementById("addrName").value.trim();
+    const phone=document.getElementById("addrPhone").value.trim();
+    const line=document.getElementById("addrLine").value.trim();
+    if(!name||!phone||!line){showToast("அனைத்து புலங்களையும் நிரப்பவும்","error");return;}
+    if(!/^[0-9]{10}$/.test(phone)){showToast("சரியான 10 இலக்க மொபைல் எண் உள்ளிடவும்","error");return;}
+    addressData={name,phone,line,city:document.getElementById("addrCity").value,pin:document.getElementById("addrPin").value,slot:document.getElementById("deliverySlot").value};
+
+    // Render summary
+    const itemsDiv=document.getElementById("orderSummaryItems");
+    itemsDiv.innerHTML=cartItems.map(i=>`<div class="flex justify-between text-sm"><span class="text-slate-700">${i.name} x${i.qty}</span><span class="font-bold">₹${i.price*i.qty}</span></div>`).join("");
+    updateTotals();
+
+    // Step animation
+    document.getElementById("stepAddress").classList.add("hidden");
+    document.getElementById("stepPayment").classList.remove("hidden");
+    document.getElementById("step2").classList.remove("bg-slate-200","text-slate-500");
+    document.getElementById("step2").classList.add("bg-primary","text-white");
+    document.getElementById("step2Label").classList.remove("text-slate-400");
+    document.getElementById("step2Label").classList.add("text-primary");
+    document.getElementById("line1").classList.add("done");
+    window.scrollTo({top:0,behavior:"smooth"});
+  };
+
+  window.goBack=function(){
+    document.getElementById("stepPayment").classList.add("hidden");
+    document.getElementById("stepAddress").classList.remove("hidden");
+    document.getElementById("step2").classList.add("bg-slate-200","text-slate-500");
+    document.getElementById("step2").classList.remove("bg-primary","text-white");
+  };
+
+  window.placeOrder=function(){
+    const orderId="ORD"+Date.now().toString().slice(-6);
+    const total=calcSubTotal()+DELIVERY_FEE;
+
+    // Save order to localStorage
+    const order={id:orderId,items:cartItems,address:addressData,payment:selectedPayment,total,status:"placed",created_at:new Date().toISOString()};
+    const orders=JSON.parse(localStorage.getItem("poomart_orders")||"[]");
+    orders.unshift(order);
+    localStorage.setItem("poomart_orders",JSON.stringify(orders));
+    localStorage.setItem("poomart_current_order",JSON.stringify(order));
+    localStorage.removeItem("poomart_cart");
+
+    // In prod: POST /api/orders {items, address, payment_method}
+
+    document.getElementById("confirmOrderId").textContent="#"+orderId;
+    document.getElementById("confirmTotal").textContent="₹"+total;
+    document.getElementById("confirmPayment").textContent=selectedPayment;
+
+    document.getElementById("stepPayment").classList.add("hidden");
+    document.getElementById("stepConfirm").classList.remove("hidden");
+    document.getElementById("bottomBar").classList.add("hidden");
+    document.getElementById("step3").classList.remove("bg-slate-200","text-slate-500");
+    document.getElementById("step3").classList.add("bg-primary","text-white");
+    document.getElementById("line2").classList.add("done");
+    window.scrollTo({top:0,behavior:"smooth"});
+
+    showToast("ஆர்டர் வெற்றிகரமாக பதிவாகியுள்ளது! 🌸","success");
+  };
+
+  function showToast(msg,type){
+    const t=document.getElementById("toast");
+    t.textContent=msg;
+    t.style.background=type==="success"?"#059669":"#dc2626";
+    t.style.color="white";
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),3000);
+  }
+})();
+</script>
+</body>
+</html>

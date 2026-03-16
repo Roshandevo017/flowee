@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>பூ மார்ட் - கடவுச்சொல் மாற்று</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#6b4cf6",
+            secondary: "#ec4899",
+            "background-light": "#f6f5f8",
+            "background-dark": "#131022",
+          },
+          fontFamily: { display: ["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"] },
+          borderRadius: { DEFAULT: "1rem", lg: "1.5rem", xl: "2rem", full: "9999px" }
+        }
+      }
+    }
+  </script>
+  <style>
+    body{ font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif; }
+    .glass-panel{
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 10px 40px rgba(107,76,246,0.10);
+    }
+    .dark .glass-panel{
+      background: rgba(19,16,34,0.65);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen overflow-x-hidden">
+  <header class="sticky top-0 z-50 bg-white/70 dark:bg-black/20 backdrop-blur border-b border-slate-200/70 dark:border-white/10">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-2xl">local_florist</span>
+        </div>
+        <h1 class="text-xl font-extrabold tracking-tight">பூ மார்ட்</h1>
+      </a>
+      <a href="loginscr.html" class="text-sm font-bold text-primary hover:text-pink-500 transition-colors">உள்நுழைய</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10 flex flex-col items-center">
+    <div class="w-full max-w-[560px] glass-panel rounded-2xl p-6 sm:p-10 relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-56 h-56 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-28 -left-28 w-72 h-72 bg-pink-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center gap-4 mb-6">
+        <div class="size-14 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-3xl">lock_reset</span>
+        </div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">கடவுச்சொல் மாற்று</h2>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">OTP மூலம் கடவுச்சொல்லை மீட்டமைக்கலாம். (Demo OTP: 123456)</p>
+        </div>
+      </div>
+
+      <section id="s1">
+        <form id="phoneForm" class="flex flex-col gap-4">
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">மொபைல் எண்</span>
+            <input id="phone" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="9876543210" inputmode="numeric" required />
+          </label>
+          <button type="submit" class="h-12 px-6 rounded-xl bg-gradient-to-r from-primary to-pink-500 text-white font-extrabold shadow-lg shadow-primary/25 active:scale-[0.98] transition">
+            OTP அனுப்பு
+            <span class="material-symbols-outlined align-middle ml-1">arrow_forward</span>
+          </button>
+        </form>
+      </section>
+
+      <section id="s2" class="hidden">
+        <form id="resetForm" class="flex flex-col gap-4">
+          <div class="text-sm text-slate-600 dark:text-slate-300">
+            <span id="phoneText"></span> என்ற எண்ணிற்கு OTP அனுப்பப்பட்டது.
+          </div>
+
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">OTP</span>
+            <input id="otp" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="123456" inputmode="numeric" required />
+          </label>
+
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">புதிய கடவுச்சொல்</span>
+            <input id="newPw" type="password" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="••••••••" required />
+          </label>
+
+          <label class="flex flex-col">
+            <span class="text-sm font-bold mb-2 ml-1">உறுதிப்படுத்த</span>
+            <input id="newPw2" type="password" class="h-12 rounded-xl bg-white/60 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary/40" placeholder="••••••••" required />
+          </label>
+
+          <div class="flex items-center justify-between gap-3">
+            <button type="button" id="back" class="h-12 px-5 rounded-xl bg-white/70 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 font-bold hover:border-primary/60 transition">
+              ← திரும்ப
+            </button>
+            <button type="submit" class="h-12 px-6 rounded-xl bg-emerald-600 text-white font-extrabold hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20">
+              மாற்று
+              <span class="material-symbols-outlined align-middle ml-1">check_circle</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+<script>
+(function(){
+  const $=(id)=>document.getElementById(id);
+  const s1=$("s1"), s2=$("s2");
+  let phoneValue="";
+
+  function getUsers(){
+    try { return JSON.parse(localStorage.getItem("poomart_users") || "[]"); }
+    catch(e){ return []; }
+  }
+  function saveUsers(arr){
+    localStorage.setItem("poomart_users", JSON.stringify(arr));
+  }
+
+  $("phoneForm").addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const phone=$("phone").value.trim();
+    if(!/^[0-9]{10}$/.test(phone)){
+      alert("சரியான 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்.");
+      return;
+    }
+    const users=getUsers();
+    if(!users.some(u=>u.phone===phone)){
+      alert("இந்த எண்ணுக்கு கணக்கு இல்லை. பதிவு செய்யவும்.");
+      window.location.href="register.html";
+      return;
+    }
+    phoneValue=phone;
+    $("phoneText").textContent="+91 "+phone;
+    s1.classList.add("hidden");
+    s2.classList.remove("hidden");
+    alert("OTP அனுப்பப்பட்டது. Demo OTP: 123456");
+  });
+
+  $("back").addEventListener("click",()=>{
+    s2.classList.add("hidden");
+    s1.classList.remove("hidden");
+  });
+
+  $("resetForm").addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const otp=$("otp").value.trim();
+    const pw=$("newPw").value;
+    const pw2=$("newPw2").value;
+
+    if(otp!=="123456"){
+      alert("OTP தவறு. Demo OTP: 123456");
+      return;
+    }
+    if(pw.length<4){
+      alert("கடவுச்சொல் குறைந்தது 4 எழுத்துகள் இருக்க வேண்டும்.");
+      return;
+    }
+    if(pw!==pw2){
+      alert("கடவுச்சொல் பொருந்தவில்லை.");
+      return;
+    }
+
+    const users=getUsers();
+    const idx=users.findIndex(u=>u.phone===phoneValue);
+    users[idx].password=pw;
+    saveUsers(users);
+
+    alert("கடவுச்சொல் மாற்றப்பட்டது. இப்போது உள்நுழையலாம்.");
+    window.location.href="loginscr.html";
+  });
+})();
+</script>
+</body>
+</html>

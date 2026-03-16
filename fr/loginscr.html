@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="ta"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>பூ மார்ட் - உள்நுழைய</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6b4cf6",
+                        "secondary": "#ec4899", // Adding a secondary pink for the gradient requirement
+                        "background-light": "#f6f5f8",
+                        "background-dark": "#131022",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans Tamil", "sans-serif"] // Added Tamil font fallback
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .dark .glass-panel {
+            background: rgba(19, 16, 34, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Floating shapes for background */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            z-index: 0;
+            animation: float 10s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden relative selection:bg-primary selection:text-white">
+<!-- Ambient Background Shapes -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+<div class="blob w-96 h-96 bg-purple-300 dark:bg-primary/30 rounded-full top-[-10%] left-[-10%] mix-blend-multiply dark:mix-blend-screen animate-blob"></div>
+<div class="blob w-96 h-96 bg-pink-300 dark:bg-pink-600/30 rounded-full bottom-[-10%] right-[-10%] mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-2000"></div>
+<div class="blob w-80 h-80 bg-blue-200 dark:bg-blue-600/30 rounded-full top-[20%] right-[20%] mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-4000"></div>
+</div>
+<!-- Main Content Wrapper -->
+<div class="relative z-10 flex flex-col flex-grow w-full">
+<!-- Header -->
+<header class="glass-panel sticky top-0 z-50 flex items-center justify-between whitespace-nowrap px-6 lg:px-10 py-4 shadow-sm">
+<div class="flex items-center gap-3 text-slate-900 dark:text-white">
+<div class="size-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">local_florist</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">பூ மார்ட்</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="register.html">முகப்பு</a>
+<a class="text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">பூக்கள்</a>
+<a class="text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">கூடைகள்</a>
+<a class="text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">பரிசுகள்</a>
+</nav>
+<a class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-5 bg-gradient-to-r from-primary to-pink-500 hover:opacity-90 transition-opacity text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-lg shadow-primary/20" href="register.html"><span class="truncate">பதிவு செய்ய</span></a>
+</div>
+</header>
+<!-- Main Layout -->
+<main class="flex-grow flex items-center justify-center p-4 py-12">
+<div class="w-full max-w-[1200px] flex flex-col md:flex-row gap-12 items-center justify-center">
+<!-- Left Side: Hero Image / Branding (Optional but good for layout balance) -->
+<div class="hidden md:flex flex-1 flex-col justify-center items-start max-w-[500px]">
+<div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl glass-panel p-2">
+<div class="w-full h-full rounded-xl overflow-hidden relative">
+<img alt="Fresh pink lotus flowers floating on water" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" data-alt="Close up of vibrant pink lotus flowers in a pond" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6zE2yH9aj5X2q3bc2CmFYMvL-tV7Ty-KvDVUxMwpAVLWi0EDcevqegtIrba8VZH90rXE272mH_TGKZEuGCmONN4qxdLQXQF4YVpZCdsbZb6TBI1omOml7If_NLuWst126o6QclOCBpbVbUtq7cxm81WlhuaIzkv5M9ceHEukFuWx9o-fOs-nqOQ64_XkfEkHOA757V_6uMlI8yl-OSeorv9UG50i-UlTKTF4tJLwb_lMX5Z0AZJNRuDYYNeqIome3Zarg2ImJ9Q_A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+<div>
+<h3 class="text-white text-2xl font-bold mb-2">புதிய மலர்கள்</h3>
+<p class="text-white/90 text-sm">உங்கள் இல்லத்திற்கு நேரடியாக டெலிவரி</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Login Form -->
+<div class="flex flex-1 justify-center w-full max-w-[480px]">
+<div class="glass-panel w-full rounded-2xl p-8 md:p-10 shadow-xl border-t border-white/60 relative overflow-hidden">
+<!-- Subtle decorative gradient inside card -->
+<div class="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex flex-col items-center mb-8">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+<span class="material-symbols-outlined text-4xl">lock</span>
+</div>
+<h1 class="text-primary tracking-tight text-[32px] font-bold leading-tight text-center">உள்நுழைய</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-2 text-center">தொடர உங்கள் பயனர் பெயர் மற்றும் கடவுச்சொல்லை உள்ளிடவும்</p>
+</div>
+<form id="loginForm" class="flex flex-col gap-6">
+<label class="flex flex-col w-full group">
+<span class="text-slate-900 dark:text-slate-200 text-sm font-bold leading-normal pb-2 ml-1">பயனர் பெயர்</span>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-slate-400 material-symbols-outlined text-[20px]">person</span>
+<input class="form-input flex w-full rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 h-14 pl-11 pr-4 text-base font-medium transition-all hover:bg-white/80 dark:hover:bg-slate-800/80" placeholder="உதா: roshan / 9876543210" type="text" value=""/>
+</div>
+</label>
+
+<label class="flex flex-col w-full group">
+  <span class="text-slate-900 dark:text-slate-200 text-sm font-bold leading-normal pb-2 ml-1">கடவுச்சொல்</span>
+  <div class="relative flex items-center">
+    <span class="absolute left-4 text-slate-400 material-symbols-outlined text-[20px]">key</span>
+    <input id="password" class="form-input flex w-full rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 h-14 pl-11 pr-12 text-base font-medium transition-all hover:bg-white/80 dark:hover:bg-slate-800/80" placeholder="••••••••" type="password" />
+    <button type="button" id="togglePw" class="absolute right-3 p-2 rounded-full hover:bg-slate-100/70 dark:hover:bg-slate-700/40 text-slate-500 dark:text-slate-300">
+      <span class="material-symbols-outlined text-[20px]">visibility</span>
+    </button>
+  </div>
+</label>
+<div class="flex items-center justify-between text-sm">
+  <a href="forgot.html" class="text-slate-500 hover:text-primary font-semibold hover:underline underline-offset-4">கடவுச்சொல் மறந்துவிட்டதா?</a>
+</div>
+
+<button type="submit" class="relative w-full cursor-pointer overflow-hidden rounded-xl h-14 bg-gradient-to-r from-primary to-pink-500 hover:to-pink-400 text-white text-lg font-bold shadow-lg shadow-primary/30 transition-all active:scale-[0.98] group">
+<span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+<span class="relative flex items-center justify-center gap-2">
+                                    உள்நுழை
+                                    <span class="material-symbols-outlined text-xl">arrow_forward</span>
+</span>
+</button>
+</form>
+<div class="mt-8 text-center">
+<div class="relative flex py-2 items-center">
+<div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+<span class="flex-shrink-0 mx-4 text-slate-400 text-xs">அல்லது</span>
+<div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal mt-4">
+                                புதிய பயனர்? 
+                                <a class="text-primary font-bold hover:text-pink-500 hover:underline transition-colors decoration-2 underline-offset-4" href="register.html">
+                                    பதிவு செய்ய
+                                </a>
+</p>
+<!-- 🔐 Portal Links: Admin / Vendor / Delivery -->
+<div class="mt-6">
+  <p class="text-xs text-slate-400 text-center mb-3 font-semibold uppercase tracking-wider">பிற போர்டல்கள்</p>
+  <div class="grid grid-cols-3 gap-2">
+
+    <!-- Vendor -->
+    <a href="vendor_login.html"
+       class="flex flex-col items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-3 rounded-xl font-bold text-xs hover:bg-emerald-100 transition shadow-sm">
+      <span class="material-symbols-outlined text-[22px]">storefront</span>
+      <span>விற்பனையாளர்</span>
+    </a>
+
+    <!-- Delivery -->
+    <a href="delivery_login.html"
+       class="flex flex-col items-center gap-1.5 bg-blue-50 border border-blue-200 text-blue-700 px-3 py-3 rounded-xl font-bold text-xs hover:bg-blue-100 transition shadow-sm">
+      <span class="material-symbols-outlined text-[22px]">two_wheeler</span>
+      <span>டெலிவரி</span>
+    </a>
+
+    <!-- Admin -->
+    <a href="admin_login.html"
+       class="flex flex-col items-center gap-1.5 bg-slate-100 border border-slate-300 text-slate-700 px-3 py-3 rounded-xl font-bold text-xs hover:bg-slate-200 transition shadow-sm">
+      <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
+      <span>நிர்வாகி</span>
+    </a>
+
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Simple -->
+<footer class="p-6 text-center text-slate-400 text-xs relative z-10">
+<p>© 2024 பூ மார்ட். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  const $ = (id) => document.getElementById(id);
+  const form = $("loginForm");
+  const pw = $("password");
+  const toggle = $("togglePw");
+
+  if(toggle && pw){
+    toggle.addEventListener("click", () => {
+      pw.type = pw.type === "password" ? "text" : "password";
+      toggle.querySelector("span").textContent = pw.type === "password" ? "visibility" : "visibility_off";
+    });
+  }
+
+  function getUsers(){
+    try { return JSON.parse(localStorage.getItem("poomart_users") || "[]"); }
+    catch(e){ return []; }
+  }
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const inputs = form.querySelectorAll("input");
+    const username = inputs[0].value.trim();
+    const password = pw.value;
+
+    // demo user fallback
+    const users = getUsers();
+    const found = users.find(u => (u.username === username || u.phone === username) && u.password === password);
+
+    if(!username || !password){
+      alert("பயனர் பெயர் மற்றும் கடவுச்சொல் உள்ளிடவும்.");
+      return;
+    }
+    if(!found){
+      alert("தவறான பயனர் பெயர் அல்லது கடவுச்சொல்.");
+      return;
+    }
+
+    localStorage.setItem("poomart_current_user", JSON.stringify(found));
+    window.location.href = "home.html";
+  });
+})();
+</script>
+
+</body></html>

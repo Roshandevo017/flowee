@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ta"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tamil Help &amp; Support Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6b4cf6",
+                        "background-light": "#f6f5f8",
+                        "background-dark": "#131022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .neumorphic-card {
+            background: #f6f5f8;
+            box-shadow: 8px 8px 16px #e2e1e4, -8px -8px 16px #ffffff;
+        }
+        .glowing-btn {
+            box-shadow: 0 0 20px rgba(107, 76, 246, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<header class="sticky top-0 z-50 glass flex items-center p-4 justify-between">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">உதவி மற்றும் ஆதரவு</h1>
+</header>
+<!-- Search Section -->
+<div class="px-6 py-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<h2 class="text-2xl font-bold mb-6 text-slate-800 dark:text-slate-100">நாங்கள் உங்களுக்கு எப்படி உதவ முடியும்?</h2>
+<div class="relative group">
+<div class="glass flex items-center px-4 py-3 rounded-2xl shadow-sm focus-within:ring-2 ring-primary/30 transition-all">
+<span class="material-symbols-outlined text-primary mr-3">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-slate-800 placeholder:text-slate-400 font-medium" placeholder="எப்படி உதவுவது?" type="text"/>
+</div>
+</div>
+</div>
+<!-- Common Issues Grid -->
+<main class="flex-1 px-6 pb-24">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4 px-1">பொதுவான சிக்கல்கள்</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="neumorphic-card p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-white/50">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">shopping_basket</span>
+</div>
+<p class="font-bold text-slate-800 leading-tight">ஆர்டர் சிக்கல்கள்</p>
+</div>
+<!-- Card 2 -->
+<div class="neumorphic-card p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-white/50">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">payments</span>
+</div>
+<p class="font-bold text-slate-800 leading-tight">பணம் செலுத்துதல்</p>
+</div>
+<!-- Card 3 -->
+<div class="neumorphic-card p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-white/50">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">local_shipping</span>
+</div>
+<p class="font-bold text-slate-800 leading-tight">டெலிவரி வினவல்கள்</p>
+</div>
+<!-- Card 4 -->
+<div class="neumorphic-card p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-3 border border-white/50">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">account_circle</span>
+</div>
+<p class="font-bold text-slate-800 leading-tight">கணக்கு அமைப்புகள்</p>
+</div>
+</div>
+<!-- FAQ Section Preview -->
+<div class="mt-10">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-slate-800">அடிக்கடி கேட்கப்படும் கேள்விகள்</h3>
+<button class="text-primary text-sm font-semibold">அனைத்தையும் பார்க்க</button>
+</div>
+<div class="space-y-3">
+<div class="p-4 bg-white/50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<span class="font-medium">ஆர்டரை ரத்து செய்வது எப்படி?</span>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<div class="p-4 bg-white/50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<span class="font-medium">பணம் திரும்பப் பெறுதல் எப்போது கிடைக்கும்?</span>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Chat Button -->
+<div class="fixed bottom-24 right-6 z-40">
+<button class="bg-gradient-to-tr from-primary to-[#8b72f9] text-white flex items-center gap-3 px-6 py-4 rounded-full glowing-btn font-bold shadow-xl active:scale-95 transition-all">
+<span class="material-symbols-outlined fill-1">forum</span>
+<span>எங்களுடன் பேசுங்கள்</span>
+</button>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="home.html">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">முகப்பு</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="ordertrack.html">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-[10px] font-bold">ஆர்டர்கள்</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="support.html">
+<div class="bg-primary/10 p-1 rounded-lg">
+<span class="material-symbols-outlined fill-1">help</span>
+</div>
+<span class="text-[10px] font-bold">உதவி</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="profilescr.html">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">சுயவிவரம்</span>
+</a>
+</nav>
+</div>
+<!-- Decorative background image with low opacity -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] z-[-1]">
+<img class="w-full h-full object-cover" data-alt="Soft aesthetic floral pattern for background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhSXGBOzRCJO_vcY-PjcVX7Yb4JBIJnq2sWYT4NVqf9mgA0sNRXk7W50w-DSM0OEkT44dHUzGVslqXWApDEPosN60wu7Moh0FZL-TY2y9GwYahhSDaz1wY-f8fWgKYQFdZWsw87QophjdY7UGYrqAk83rBUlQiiH2N0sgJbLjoKxvTsglS7r2g3TIbyYgC6_QggSh3rRfiSiYy_hUzBzxQn52b3qy4oDz6471p66UGfvJqUK8h_9a_MOfdcD984oMaxZEIM4RoLWw"/>
+</div>
+</body></html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>பூ மார்ட் - விற்பனையாளர் டாஷ்போர்டு</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={
+  darkMode:"class",
+  theme:{extend:{
+    colors:{primary:"#059669","primary-light":"#10b981","background-light":"#f0fdf4","background-dark":"#0a1a12","surface-light":"#ffffff","surface-dark":"#111d16"},
+    fontFamily:{display:["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"]},
+    borderRadius:{DEFAULT:"1rem",lg:"1.25rem",xl:"1.5rem","2xl":"2rem",full:"9999px"},
+    boxShadow:{soft:"0 4px 20px -2px rgba(5,150,105,0.12)",glass:"0 8px 32px rgba(5,150,105,0.08)"}
+  }}
+}
+</script>
+<style>
+body{font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif;}
+.glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.5);}
+.dark .glass{background:rgba(17,29,22,0.8);border:1px solid rgba(255,255,255,0.08);}
+.stat-card{transition:transform 0.2s,box-shadow 0.2s;}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(5,150,105,0.15);}
+.order-row{transition:background 0.15s;}
+.order-row:hover{background:rgba(5,150,105,0.04);}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px;transition:all 0.15s;color:#475569;}
+.sidebar-link:hover,.sidebar-link.active{background:rgba(5,150,105,0.12);color:#059669;}
+.sidebar-link.active .material-symbols-outlined{color:#059669;}
+#toast{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:12px;font-weight:700;font-size:13px;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+#toast.show{transform:translateX(0);}
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen font-display">
+
+<div id="toast"></div>
+
+<!-- Layout -->
+<div class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="hidden md:flex flex-col w-64 glass border-r border-slate-200/70 dark:border-white/10 sticky top-0 h-screen z-40 p-5">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#059669,#10b981)">
+        <span class="material-symbols-outlined text-white text-xl">storefront</span>
+      </div>
+      <div>
+        <p class="font-extrabold text-slate-800 dark:text-white text-sm" id="shopNameSidebar">பூக்கடை</p>
+        <p class="text-xs text-emerald-600 font-semibold">Vendor Portal</p>
+      </div>
+    </div>
+
+    <nav class="flex flex-col gap-1 flex-1">
+      <a href="vendor_dashboard.html" class="sidebar-link active">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span>டாஷ்போர்டு
+      </a>
+      <a href="vendor_orders.html" class="sidebar-link">
+        <span class="material-symbols-outlined text-[20px]">receipt_long</span>ஆர்டர்கள்
+        <span id="pendingBadge" class="ml-auto bg-red-500 text-white text-[10px] font-bold rounded-full px-2 py-0.5 hidden">3</span>
+      </a>
+      <a href="vendor_products.html" class="sidebar-link">
+        <span class="material-symbols-outlined text-[20px]">inventory_2</span>தயாரிப்புகள்
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="material-symbols-outlined text-[20px]">bar_chart</span>புள்ளிவிவரம்
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="material-symbols-outlined text-[20px]">settings</span>அமைப்புகள்
+      </a>
+    </nav>
+
+    <button onclick="logout()" class="sidebar-link text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 mt-4">
+      <span class="material-symbols-outlined text-[20px]">logout</span>வெளியேறு
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Top bar -->
+    <header class="glass border-b border-slate-200/70 dark:border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+      <div>
+        <h1 class="text-xl font-extrabold text-slate-800 dark:text-white">டாஷ்போர்டு</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400" id="dateDisplay">—</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- Shop status toggle -->
+        <div class="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-full px-4 py-2">
+          <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+          <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400">கடை திறந்திருக்கிறது</span>
+          <label class="relative inline-flex items-center cursor-pointer ml-1">
+            <input type="checkbox" id="shopToggle" checked class="sr-only peer">
+            <div class="w-8 h-4 bg-slate-300 peer-checked:bg-emerald-500 rounded-full transition peer-focus:ring-2 peer-focus:ring-emerald-400/30 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-3 after:h-3 after:bg-white after:rounded-full after:transition peer-checked:after:translate-x-4"></div>
+          </label>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-emerald-600 font-extrabold text-sm" id="vendorInitial">V</div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 space-y-6">
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="stat-card bg-white dark:bg-surface-dark rounded-2xl p-5 border border-slate-100 dark:border-white/10 shadow-soft">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">இன்றைய வருவாய்</span>
+            <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center"><span class="material-symbols-outlined text-emerald-600 text-[18px]">currency_rupee</span></div>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 dark:text-white" id="todayRevenue">₹0</p>
+          <p class="text-xs text-emerald-600 font-semibold mt-1" id="revenueChange">—</p>
+        </div>
+        <div class="stat-card bg-white dark:bg-surface-dark rounded-2xl p-5 border border-slate-100 dark:border-white/10 shadow-soft">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">நிலுவை ஆர்டர்கள்</span>
+            <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center"><span class="material-symbols-outlined text-amber-600 text-[18px]">pending</span></div>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 dark:text-white" id="pendingCount">0</p>
+          <a href="vendor_orders.html" class="text-xs text-amber-600 font-semibold mt-1 block hover:underline">ஆர்டர்கள் காண →</a>
+        </div>
+        <div class="stat-card bg-white dark:bg-surface-dark rounded-2xl p-5 border border-slate-100 dark:border-white/10 shadow-soft">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">இன்றைய ஆர்டர்கள்</span>
+            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center"><span class="material-symbols-outlined text-blue-600 text-[18px]">shopping_bag</span></div>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 dark:text-white" id="todayOrders">0</p>
+          <p class="text-xs text-slate-500 mt-1" id="completedOrders">0 நிறைவு</p>
+        </div>
+        <div class="stat-card bg-white dark:bg-surface-dark rounded-2xl p-5 border border-slate-100 dark:border-white/10 shadow-soft">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">மதிப்பீடு</span>
+            <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center"><span class="material-symbols-outlined text-yellow-500 text-[18px]">star</span></div>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800 dark:text-white">4.8 ⭐</p>
+          <p class="text-xs text-slate-500 mt-1">128 மதிப்புரைகள்</p>
+        </div>
+      </div>
+
+      <!-- Recent orders + Quick actions -->
+      <div class="grid lg:grid-cols-3 gap-6">
+
+        <!-- Recent Orders -->
+        <div class="lg:col-span-2 bg-white dark:bg-surface-dark rounded-2xl border border-slate-100 dark:border-white/10 shadow-soft overflow-hidden">
+          <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-white/10">
+            <h2 class="font-extrabold text-slate-800 dark:text-white">சமீபத்திய ஆர்டர்கள்</h2>
+            <a href="vendor_orders.html" class="text-xs text-emerald-600 font-bold hover:underline">அனைத்தும் →</a>
+          </div>
+          <div id="recentOrders" class="divide-y divide-slate-50 dark:divide-white/5">
+            <!-- Loaded by JS -->
+          </div>
+        </div>
+
+        <!-- Quick actions + top products -->
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-100 dark:border-white/10 shadow-soft p-5">
+            <h3 class="font-extrabold text-slate-800 dark:text-white mb-4">விரைவு செயல்கள்</h3>
+            <div class="space-y-2">
+              <a href="vendor_products.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition group">
+                <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                  <span class="material-symbols-outlined text-emerald-600 text-[18px]">add_circle</span>
+                </div>
+                <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-emerald-700">தயாரிப்பு சேர்க்கவும்</span>
+              </a>
+              <a href="vendor_orders.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-900/20 transition group">
+                <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                  <span class="material-symbols-outlined text-amber-600 text-[18px]">notifications_active</span>
+                </div>
+                <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-amber-700">நிலுவை ஆர்டர்கள்</span>
+              </a>
+              <a href="#" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition group">
+                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <span class="material-symbols-outlined text-blue-600 text-[18px]">download</span>
+                </div>
+                <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-700">அறிக்கை பதிவிறக்கம்</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Top Products -->
+          <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-100 dark:border-white/10 shadow-soft p-5">
+            <h3 class="font-extrabold text-slate-800 dark:text-white mb-4">சிறந்த தயாரிப்புகள்</h3>
+            <div class="space-y-3" id="topProducts">
+              <!-- Loaded by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Mobile bottom nav -->
+<nav class="fixed bottom-0 left-0 right-0 md:hidden glass border-t border-slate-200 dark:border-white/10 px-6 py-3 flex justify-between items-center z-50">
+  <a href="vendor_dashboard.html" class="flex flex-col items-center gap-0.5 text-emerald-600">
+    <span class="material-symbols-outlined text-[22px]">dashboard</span>
+    <span class="text-[10px] font-bold">டாஷ்</span>
+  </a>
+  <a href="vendor_orders.html" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-emerald-600 transition-colors">
+    <span class="material-symbols-outlined text-[22px]">receipt_long</span>
+    <span class="text-[10px] font-bold">ஆர்டர்கள்</span>
+  </a>
+  <a href="vendor_products.html" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-emerald-600 transition-colors">
+    <span class="material-symbols-outlined text-[22px]">inventory_2</span>
+    <span class="text-[10px] font-bold">தயாரிப்பு</span>
+  </a>
+  <a href="#" onclick="logout()" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-red-500 transition-colors">
+    <span class="material-symbols-outlined text-[22px]">logout</span>
+    <span class="text-[10px] font-bold">வெளி</span>
+  </a>
+</nav>
+
+<script>
+(function(){
+  // Auth check
+  if(!localStorage.getItem("vendor_logged_in")){
+    window.location.href="vendor_login.html"; return;
+  }
+
+  const vendor = JSON.parse(localStorage.getItem("vendor_data")||"{}");
+  document.getElementById("shopNameSidebar").textContent = vendor.name||"பூக்கடை";
+  document.getElementById("vendorInitial").textContent = (vendor.name||"V")[0];
+  document.getElementById("dateDisplay").textContent = new Date().toLocaleDateString("ta-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+
+  // Mock orders data
+  const orders = [
+    {id:"ORD001",customer:"அருண் குமார்",items:"ரோஜா மாலை x2",amount:280,status:"placed",time:"9:30 AM"},
+    {id:"ORD002",customer:"மீனா தேவி",items:"மல்லிகை 1kg",amount:120,status:"accepted",time:"10:15 AM"},
+    {id:"ORD003",customer:"கார்த்திக்",items:"தாமரை x5",amount:350,status:"preparing",time:"11:00 AM"},
+    {id:"ORD004",customer:"சுகந்தி",items:"வெண்டாமரை x3",amount:180,status:"delivered",time:"8:45 AM"},
+  ];
+
+  const statusColors = {
+    placed:"bg-amber-100 text-amber-700",
+    accepted:"bg-blue-100 text-blue-700",
+    preparing:"bg-purple-100 text-purple-700",
+    out_for_delivery:"bg-orange-100 text-orange-700",
+    delivered:"bg-emerald-100 text-emerald-700",
+    rejected:"bg-red-100 text-red-700"
+  };
+  const statusLabels = {placed:"வந்தது",accepted:"ஏற்கப்பட்டது",preparing:"தயாராகிறது",out_for_delivery:"வழியில்",delivered:"வழங்கப்பட்டது",rejected:"நிராகரிக்கப்பட்டது"};
+
+  // Render recent orders
+  const pending = orders.filter(o=>["placed","accepted","preparing"].includes(o.status));
+  document.getElementById("pendingCount").textContent = pending.length;
+  document.getElementById("pendingBadge").textContent = pending.length;
+  if(pending.length>0) document.getElementById("pendingBadge").classList.remove("hidden");
+
+  const todayRevenue = orders.filter(o=>o.status==="delivered").reduce((a,o)=>a+o.amount,0);
+  document.getElementById("todayRevenue").textContent = "₹"+todayRevenue;
+  document.getElementById("todayOrders").textContent = orders.length;
+  document.getElementById("completedOrders").textContent = orders.filter(o=>o.status==="delivered").length+" நிறைவு";
+
+  const ordersDiv = document.getElementById("recentOrders");
+  orders.slice(0,4).forEach(o=>{
+    ordersDiv.innerHTML += `
+      <div class="order-row flex items-center justify-between px-6 py-4">
+        <div>
+          <p class="font-bold text-slate-800 dark:text-white text-sm">${o.customer} <span class="text-xs text-slate-400 font-normal">#${o.id}</span></p>
+          <p class="text-xs text-slate-500 mt-0.5">${o.items}</p>
+        </div>
+        <div class="text-right">
+          <p class="font-extrabold text-slate-800 dark:text-white text-sm">₹${o.amount}</p>
+          <span class="text-xs font-bold px-2 py-0.5 rounded-full ${statusColors[o.status]||'bg-slate-100 text-slate-600'}">${statusLabels[o.status]||o.status}</span>
+        </div>
+      </div>`;
+  });
+
+  // Top products
+  const products = [
+    {name:"ரோஜா மாலை",sold:24,revenue:3360},
+    {name:"மல்லிகை",sold:18,revenue:2160},
+    {name:"தாமரை",sold:12,revenue:1800},
+  ];
+  const topDiv = document.getElementById("topProducts");
+  products.forEach((p,i)=>{
+    topDiv.innerHTML += `
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 font-extrabold text-xs">${i+1}</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">${p.name}</p>
+          <p class="text-xs text-slate-400">${p.sold} விற்பனை</p>
+        </div>
+        <span class="text-xs font-bold text-emerald-600">₹${p.revenue}</span>
+      </div>`;
+  });
+})();
+
+function logout(){
+  localStorage.removeItem("vendor_logged_in");
+  localStorage.removeItem("vendor_data");
+  window.location.href="vendor_login.html";
+}
+</script>
+</body>
+</html>

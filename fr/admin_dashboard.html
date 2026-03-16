@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<div class="bg-purple-600 text-white p-4 flex justify-between">
+<h2 class="font-bold">Admin Dashboard</h2>
+<button onclick="logout()" class="bg-white text-purple-600 px-4 py-1 rounded">
+வெளியேறு
+</button>
+</div>
+
+<div class="p-6">
+
+<h3 class="text-xl font-bold mb-4">பதிவு செய்யப்பட்ட பயனர்கள்</h3>
+
+<table class="w-full border border-gray-300">
+<thead class="bg-purple-100">
+<tr>
+<th class="border p-2">பெயர்</th>
+<th class="border p-2">மொபைல்</th>
+<th class="border p-2">நகரம்</th>
+</tr>
+</thead>
+<tbody id="userTable"></tbody>
+</table>
+
+</div>
+
+<script>
+if(localStorage.getItem("admin_logged_in")!=="true"){
+window.location.href="admin_login.html";
+}
+
+function loadUsers(){
+let users = JSON.parse(localStorage.getItem("poomart_users")||"[]");
+let table = document.getElementById("userTable");
+table.innerHTML="";
+
+users.forEach(u=>{
+table.innerHTML += `
+<tr>
+<td class="border p-2">${u.firstName || ""} ${u.lastName || ""}</td>
+<td class="border p-2">${u.phone || ""}</td>
+<td class="border p-2">${u.address?.city || ""}</td>
+</tr>
+`;
+});
+}
+
+function logout(){
+localStorage.removeItem("admin_logged_in");
+window.location.href="admin_login.html";
+}
+
+loadUsers();
+</script>
+
+</body>
+</html>

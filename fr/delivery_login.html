@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>பூ மார்ட் - டெலிவரி உள்நுழை</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{
+  colors:{primary:"#2563eb","background-light":"#eff6ff","background-dark":"#0a0f1a"},
+  fontFamily:{display:["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"]}
+}}}
+</script>
+<style>
+body{font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif;}
+.glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 20px 60px rgba(37,99,235,0.12);}
+.road-dot{position:absolute;border-radius:50%;background:rgba(37,99,235,0.15);animation:roadPulse 3s ease-in-out infinite;}
+@keyframes roadPulse{0%,100%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.3);opacity:0.2;}}
+.bike-float{animation:bikeFloat 4s ease-in-out infinite;}
+@keyframes bikeFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-6px);}80%{transform:translateX(6px);}}
+.shake{animation:shake 0.4s ease-in-out;}
+#toast{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:12px;font-weight:700;font-size:14px;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+#toast.show{transform:translateX(0);}
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative overflow-hidden" style="background:linear-gradient(135deg,#dbeafe 0%,#eff6ff 50%,#e0f2fe 100%);">
+
+<!-- Background animated dots -->
+<div class="road-dot w-32 h-32" style="top:5%;left:5%;animation-delay:0s;"></div>
+<div class="road-dot w-48 h-48" style="bottom:10%;right:8%;animation-delay:1s;"></div>
+<div class="road-dot w-24 h-24" style="top:40%;right:3%;animation-delay:2s;"></div>
+
+<div id="toast"></div>
+
+<div class="relative z-10 w-full max-w-5xl mx-4 flex flex-col md:flex-row gap-0 overflow-hidden rounded-3xl shadow-2xl">
+
+  <!-- Left Panel -->
+  <div class="hidden md:flex flex-col justify-between p-10 w-[42%] relative overflow-hidden" style="background:linear-gradient(145deg,#1d4ed8,#3b82f6);">
+    <div class="absolute inset-0 opacity-10">
+      <svg width="100%" height="100%"><pattern id="p" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M0 15 L30 15 M15 0 L15 30" stroke="white" stroke-width="0.5"/></pattern><rect width="100%" height="100%" fill="url(#p)"/></svg>
+    </div>
+    <div class="relative z-10">
+      <a href="loginscr.html" class="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-semibold mb-8 transition-colors">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span> திரும்பு
+      </a>
+      <!-- Bike icon -->
+      <div class="bike-float mb-6">
+        <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-5xl">two_wheeler</span>
+        </div>
+      </div>
+      <h2 class="text-3xl font-extrabold text-white mb-3">டெலிவரி போர்டல்</h2>
+      <p class="text-white/80 text-sm leading-relaxed mb-8">பூக்களை வாடிக்கையாளர்களின் வீடு வரை கொண்டு செல்லுங்கள்.</p>
+    </div>
+    <div class="relative z-10 space-y-3">
+      <div class="flex items-center gap-3 bg-white/15 rounded-xl px-4 py-3">
+        <span class="material-symbols-outlined text-white text-xl">location_on</span>
+        <span class="text-white text-sm font-semibold">நேர்நிலை GPS கண்காணிப்பு</span>
+      </div>
+      <div class="flex items-center gap-3 bg-white/15 rounded-xl px-4 py-3">
+        <span class="material-symbols-outlined text-white text-xl">route</span>
+        <span class="text-white text-sm font-semibold">வழிகாட்டல் (Navigation)</span>
+      </div>
+      <div class="flex items-center gap-3 bg-white/15 rounded-xl px-4 py-3">
+        <span class="material-symbols-outlined text-white text-xl">currency_rupee</span>
+        <span class="text-white text-sm font-semibold">வருவாய் கண்காணிப்பு</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel - Form -->
+  <div class="glass flex-1 p-8 md:p-10">
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-blue-600 text-xl">two_wheeler</span>
+        </div>
+        <span class="text-blue-600 text-sm font-bold uppercase tracking-wider">Delivery Portal</span>
+      </div>
+      <h1 class="text-3xl font-extrabold text-slate-800">உள்நுழைய</h1>
+      <p class="text-slate-500 text-sm mt-1">உங்கள் டெலிவரி கணக்கில் உள்நுழையவும்</p>
+    </div>
+
+    <form id="deliveryLoginForm" class="space-y-5">
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-2">மொபைல் எண்</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">phone</span>
+          <input id="deliveryId" type="text" placeholder="9876543210"
+            class="w-full h-12 pl-11 pr-4 rounded-xl border border-slate-200 bg-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm font-medium" required/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-2">கடவுச்சொல்</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">key</span>
+          <input id="deliveryPw" type="password" placeholder="••••••••"
+            class="w-full h-12 pl-11 pr-12 rounded-xl border border-slate-200 bg-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm font-medium" required/>
+          <button type="button" id="togglePw" class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full hover:bg-slate-100 text-slate-400">
+            <span class="material-symbols-outlined text-[20px]">visibility</span>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="w-full h-12 rounded-xl font-extrabold text-white text-base shadow-lg transition-all active:scale-[0.98]"
+        style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">
+        உள்நுழை →
+      </button>
+    </form>
+
+    <div class="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+      <p class="text-xs font-bold text-blue-700 mb-1">Demo Credentials</p>
+      <p class="text-xs text-blue-600">Phone: <span class="font-mono font-bold">9000000001</span> | Password: <span class="font-mono font-bold">delivery123</span></p>
+    </div>
+
+    <p class="text-center text-sm mt-6 text-slate-500">
+      வாடிக்கையாளர்? 
+      <a href="loginscr.html" class="text-blue-600 font-bold hover:underline">இங்கே உள்நுழைய</a>
+    </p>
+    <p class="text-center text-sm mt-2 text-slate-500">
+      விற்பனையாளர்? 
+      <a href="vendor_login.html" class="text-emerald-600 font-bold hover:underline">இங்கே உள்நுழைய</a>
+    </p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const form=document.getElementById("deliveryLoginForm");
+  const pw=document.getElementById("deliveryPw");
+  const toggle=document.getElementById("togglePw");
+  const toast=document.getElementById("toast");
+
+  toggle?.addEventListener("click",()=>{
+    pw.type=pw.type==="password"?"text":"password";
+    toggle.querySelector("span").textContent=pw.type==="password"?"visibility":"visibility_off";
+  });
+
+  function showToast(msg,type){
+    toast.textContent=msg;
+    toast.style.background=type==="success"?"#1d4ed8":"#dc2626";
+    toast.style.color="white";
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"),3000);
+  }
+
+  form?.addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const id=document.getElementById("deliveryId").value.trim();
+    const pass=pw.value;
+    if(id==="9000000001"&&pass==="delivery123"){
+      localStorage.setItem("delivery_logged_in","true");
+      localStorage.setItem("delivery_data",JSON.stringify({name:"முருகேஷ்",phone:id,partner_id:"dp_001"}));
+      showToast("உள்நுழைவு வெற்றி! 🛵","success");
+      setTimeout(()=>window.location.href="delivery_orders.html",1000);
+    } else {
+      pw.closest("div").parentElement.classList.add("shake");
+      setTimeout(()=>pw.closest("div").parentElement.classList.remove("shake"),400);
+      showToast("தவறான ID அல்லது கடவுச்சொல்","error");
+    }
+  });
+})();
+</script>
+</body>
+</html>

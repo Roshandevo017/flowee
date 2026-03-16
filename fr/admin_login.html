@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>நிர்வாகி உள்நுழை</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif;
+}
+.glass-panel{
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 10px 40px rgba(107,76,246,0.15);
+}
+</style>
+
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-100 to-pink-100">
+
+<div class="glass-panel w-full max-w-md rounded-2xl p-8">
+
+<!-- Icon -->
+<div class="flex justify-center mb-4">
+  <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-3xl">
+    🔐
+  </div>
+</div>
+
+<h2 class="text-2xl font-extrabold text-center text-purple-600 mb-6">
+நிர்வாகி உள்நுழை
+</h2>
+
+<form id="adminLoginForm" class="space-y-5">
+
+<div>
+<label class="block font-bold mb-1">பயனர் பெயர்</label>
+<input id="adminUser"
+class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-400 outline-none"
+placeholder="Admin Username"
+required>
+</div>
+
+<div>
+<label class="block font-bold mb-1">கடவுச்சொல்</label>
+<input id="adminPass"
+type="password"
+class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-400 outline-none"
+placeholder="Password"
+required>
+</div>
+
+<button
+class="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
+உள்நுழை
+</button>
+
+</form>
+
+<p class="text-center text-sm mt-6">
+பயனர் பக்கம்?
+<a href="loginscr.html" class="text-purple-600 font-bold hover:underline">
+உள்நுழைய
+</a>
+</p>
+
+</div>
+
+<script>
+document.getElementById("adminLoginForm").addEventListener("submit",function(e){
+e.preventDefault();
+
+let user = document.getElementById("adminUser").value.trim();
+let pass = document.getElementById("adminPass").value.trim();
+
+if(user==="admin" && pass==="44"){
+localStorage.setItem("admin_logged_in","true");
+alert("Admin Login வெற்றி!");
+window.location.href="admin_dashboard.html";
+}else{
+alert("தவறான பயனர் பெயர் அல்லது கடவுச்சொல்");
+}
+});
+</script>
+
+</body>
+</html>

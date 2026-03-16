@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>பூ மார்ட் - ஆர்டர் நிர்வாகம்</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{
+  colors:{primary:"#059669","background-light":"#f0fdf4","background-dark":"#0a1a12","surface-light":"#ffffff","surface-dark":"#111d16"},
+  fontFamily:{display:["Plus Jakarta Sans","Noto Sans Tamil","sans-serif"]}
+}}}
+</script>
+<style>
+body{font-family:"Plus Jakarta Sans","Noto Sans Tamil",sans-serif;}
+.glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.5);}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px;transition:all 0.15s;color:#475569;}
+.sidebar-link:hover,.sidebar-link.active{background:rgba(5,150,105,0.12);color:#059669;}
+.order-card{transition:transform 0.15s,box-shadow 0.15s;}
+.order-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(5,150,105,0.12);}
+#toast{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:12px;font-weight:700;font-size:13px;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+#toast.show{transform:translateX(0);}
+.tab-btn{padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;transition:all 0.15s;color:#64748b;}
+.tab-btn.active{background:#059669;color:white;}
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen font-display">
+<div id="toast"></div>
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="hidden md:flex flex-col w-64 glass border-r border-slate-200/70 dark:border-white/10 sticky top-0 h-screen z-40 p-5">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#059669,#10b981)">
+        <span class="material-symbols-outlined text-white text-xl">storefront</span>
+      </div>
+      <div>
+        <p class="font-extrabold text-slate-800 dark:text-white text-sm" id="shopNameSidebar">பூக்கடை</p>
+        <p class="text-xs text-emerald-600 font-semibold">Vendor Portal</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 flex-1">
+      <a href="vendor_dashboard.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">dashboard</span>டாஷ்போர்டு</a>
+      <a href="vendor_orders.html" class="sidebar-link active"><span class="material-symbols-outlined text-[20px]">receipt_long</span>ஆர்டர்கள்</a>
+      <a href="vendor_products.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">inventory_2</span>தயாரிப்புகள்</a>
+      <a href="#" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">bar_chart</span>புள்ளிவிவரம்</a>
+      <a href="#" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">settings</span>அமைப்புகள்</a>
+    </nav>
+    <button onclick="logout()" class="sidebar-link text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 mt-4">
+      <span class="material-symbols-outlined text-[20px]">logout</span>வெளியேறு
+    </button>
+  </aside>
+
+  <div class="flex-1 flex flex-col">
+    <header class="glass border-b border-slate-200/70 dark:border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+      <div>
+        <h1 class="text-xl font-extrabold">ஆர்டர் நிர்வாகம்</h1>
+        <p class="text-xs text-slate-500">உள்வரும் ஆர்டர்களை நிர்வகிக்கவும்</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full" id="pendingLabel">3 நிலுவை</span>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6">
+      <!-- Filter tabs -->
+      <div class="flex gap-2 mb-6 flex-wrap">
+        <button class="tab-btn active" onclick="filterOrders('all',this)">அனைத்தும்</button>
+        <button class="tab-btn" onclick="filterOrders('placed',this)">வந்தது</button>
+        <button class="tab-btn" onclick="filterOrders('accepted',this)">ஏற்கப்பட்டது</button>
+        <button class="tab-btn" onclick="filterOrders('preparing',this)">தயாராகிறது</button>
+        <button class="tab-btn" onclick="filterOrders('delivered',this)">வழங்கப்பட்டது</button>
+      </div>
+
+      <div id="ordersGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <!-- Loaded by JS -->
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Mobile nav -->
+<nav class="fixed bottom-0 left-0 right-0 md:hidden glass border-t border-slate-200 dark:border-white/10 px-6 py-3 flex justify-between items-center z-50">
+  <a href="vendor_dashboard.html" class="flex flex-col items-center gap-0.5 text-slate-400"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="text-[10px] font-bold">டாஷ்</span></a>
+  <a href="vendor_orders.html" class="flex flex-col items-center gap-0.5 text-emerald-600"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="text-[10px] font-bold">ஆர்டர்கள்</span></a>
+  <a href="vendor_products.html" class="flex flex-col items-center gap-0.5 text-slate-400"><span class="material-symbols-outlined text-[22px]">inventory_2</span><span class="text-[10px] font-bold">தயாரிப்பு</span></a>
+  <a href="#" onclick="logout()" class="flex flex-col items-center gap-0.5 text-slate-400"><span class="material-symbols-outlined text-[22px]">logout</span><span class="text-[10px] font-bold">வெளி</span></a>
+</nav>
+
+<script>
+if(!localStorage.getItem("vendor_logged_in")) window.location.href="vendor_login.html";
+
+const vendor = JSON.parse(localStorage.getItem("vendor_data")||"{}");
+document.getElementById("shopNameSidebar").textContent = vendor.name||"பூக்கடை";
+
+// Mock orders - in prod fetch from GET /api/vendor/orders
+let orders = [
+  {id:"ORD001",customer:"அருண் குமார்",phone:"9876543210",address:"12, அண்ணா நகர், சென்னை",items:[{name:"ரோஜா மாலை",qty:2,price:140}],amount:280,status:"placed",time:"9:30 AM",payment:"COD"},
+  {id:"ORD002",customer:"மீனா தேவி",phone:"9123456789",address:"45, கோவில் தெரு, மதுரை",items:[{name:"மல்லிகை 1kg",qty:1,price:120}],amount:120,status:"accepted",time:"10:15 AM",payment:"Online"},
+  {id:"ORD003",customer:"கார்த்திக்",phone:"9988776655",address:"8, ராஜாஜி நகர், கோவை",items:[{name:"தாமரை",qty:5,price:70}],amount:350,status:"preparing",time:"11:00 AM",payment:"COD"},
+  {id:"ORD004",customer:"சுகந்தி",phone:"9876001122",address:"3, மகாத்மா காந்தி சாலை, திருச்சி",items:[{name:"வெண்டாமரை",qty:3,price:60}],amount:180,status:"delivered",time:"8:45 AM",payment:"Online"},
+  {id:"ORD005",customer:"பாலமுருகன்",phone:"9765432100",address:"22, நேதாஜி தெரு, சேலம்",items:[{name:"ரோஜா கொத்து",qty:1,price:250}],amount:250,status:"placed",time:"11:30 AM",payment:"COD"},
+];
+
+const statusColors={placed:"bg-amber-100 text-amber-700 border-amber-200",accepted:"bg-blue-100 text-blue-700 border-blue-200",preparing:"bg-purple-100 text-purple-700 border-purple-200",out_for_delivery:"bg-orange-100 text-orange-700 border-orange-200",delivered:"bg-emerald-100 text-emerald-700 border-emerald-200",rejected:"bg-red-100 text-red-700 border-red-200"};
+const statusLabels={placed:"வந்தது",accepted:"ஏற்கப்பட்டது",preparing:"தயாராகிறது",out_for_delivery:"வழியில்",delivered:"வழங்கப்பட்டது",rejected:"நிராகரிக்கப்பட்டது"};
+
+let currentFilter="all";
+
+function renderOrders(filter){
+  const filtered = filter==="all"?orders:orders.filter(o=>o.status===filter);
+  const grid = document.getElementById("ordersGrid");
+  grid.innerHTML="";
+  if(filtered.length===0){
+    grid.innerHTML=`<div class="col-span-full text-center py-12 text-slate-400"><span class="material-symbols-outlined text-5xl block mb-3">inbox</span><p class="font-bold">ஆர்டர்கள் இல்லை</p></div>`;
+    return;
+  }
+  filtered.forEach(o=>{
+    const isPending = ["placed"].includes(o.status);
+    const isAccepted = o.status==="accepted";
+    grid.innerHTML+=`
+    <div class="order-card bg-white dark:bg-surface-dark rounded-2xl border ${isPending?'border-amber-200':'border-slate-100 dark:border-white/10'} p-5 shadow-sm ${isPending?'ring-2 ring-amber-100':''}">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <p class="font-extrabold text-slate-800 dark:text-white">${o.customer}</p>
+          <p class="text-xs text-slate-500">#${o.id} · ${o.time}</p>
+        </div>
+        <span class="text-xs font-bold px-2.5 py-1 rounded-full border ${statusColors[o.status]||'bg-slate-100 text-slate-600 border-slate-200'}">${statusLabels[o.status]||o.status}</span>
+      </div>
+      <div class="bg-slate-50 dark:bg-white/5 rounded-xl p-3 mb-3 space-y-1">
+        ${o.items.map(i=>`<div class="flex justify-between text-sm"><span class="text-slate-700 dark:text-slate-300">${i.name} x${i.qty}</span><span class="font-bold">₹${i.price*i.qty}</span></div>`).join("")}
+      </div>
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-1.5 text-xs text-slate-500">
+          <span class="material-symbols-outlined text-[14px]">location_on</span>
+          <span class="truncate max-w-[140px]">${o.address}</span>
+        </div>
+        <div class="flex items-center gap-1 text-xs">
+          <span class="material-symbols-outlined text-[14px] ${o.payment==='COD'?'text-amber-500':'text-emerald-500'}">${o.payment==='COD'?'payments':'credit_card'}</span>
+          <span class="font-bold text-slate-700">${o.payment}</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-white/10">
+        <span class="font-extrabold text-slate-800 dark:text-white">₹${o.amount}</span>
+        <div class="flex gap-2">
+          ${isPending?`
+            <button onclick="updateOrder('${o.id}','rejected')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition">நிராகரி</button>
+            <button onclick="updateOrder('${o.id}','accepted')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition">ஏற்கவும்</button>
+          `:""}
+          ${isAccepted?`<button onclick="updateOrder('${o.id}','preparing')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 transition">தயாரிக்கிறோம்</button>`:""}
+          ${o.status==="preparing"?`<button onclick="updateOrder('${o.id}','out_for_delivery')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 transition">வழியில் →</button>`:""}
+        </div>
+      </div>
+    </div>`;
+  });
+
+  const pending = orders.filter(o=>o.status==="placed").length;
+  document.getElementById("pendingLabel").textContent = pending+" நிலுவை";
+}
+
+function filterOrders(filter, btn){
+  currentFilter=filter;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderOrders(filter);
+}
+
+function updateOrder(orderId, newStatus){
+  const idx = orders.findIndex(o=>o.id===orderId);
+  if(idx>-1){
+    orders[idx].status=newStatus;
+    renderOrders(currentFilter);
+    showToast(statusLabels[newStatus]+"!","success");
+    // In prod: PUT /api/vendor/orders/{orderId}/status
+  }
+}
+
+function showToast(msg,type){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.style.background=type==="success"?"#059669":"#dc2626";
+  t.style.color="white";
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2500);
+}
+
+function logout(){
+  localStorage.removeItem("vendor_logged_in");
+  window.location.href="vendor_login.html";
+}
+
+renderOrders("all");
+</script>
+</body>
+</html>

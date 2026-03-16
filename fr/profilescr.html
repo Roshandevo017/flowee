@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="ta"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>மலர் சந்தை - என் கணக்கு</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6b4cf6",
+                        secondary: "#8b5cf6",
+                        background: {
+                            light: "#f6f5f8",
+                            dark: "#131022",
+                        },
+                        surface: {
+                            light: "#ffffff",
+                            dark: "#1e1b2e",
+                        }
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "Noto Sans Tamil", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "1.5rem",
+                        xl: "2rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 w-full bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+<!-- Logo & Brand -->
+<div class="flex items-center gap-4">
+<div class="size-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">local_florist</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">மலர் சந்தை</h1>
+</div>
+<!-- Search Bar (Hidden on mobile, visible on lg) -->
+<div class="hidden lg:flex flex-1 max-w-md mx-8">
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 border-none rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-primary/50 transition-all" placeholder="பூக்கள், பரிசுகளை தேடுங்கள்..." type="text"/>
+</div>
+</div>
+<!-- Nav Actions -->
+<div class="flex items-center gap-4 sm:gap-6">
+<nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+<a class="hover:text-primary transition-colors" href="home.html">முகப்பு</a>
+<a class="hover:text-primary transition-colors" href="shopdts.html">பூக்கள்</a>
+<a class="hover:text-primary transition-colors" href="support.html">பரிசுகள்</a>
+<a class="text-primary font-bold" href="profilescr.html">என் கணக்கு</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="relative p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">shopping_cart</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full"></span>
+</button>
+<button class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">notifications</span>
+</button>
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-white dark:border-slate-700 shadow-sm" data-alt="Portrait of a woman smiling" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcOfKoxWdA1bprzSpwdqWdv5_yN5fOicZl13mSBN0rx88XZZ7POCuPd9bTn4r0_iuiwqDTM1pzPMddh5dHcovZKNHloyQCEwO8oM66_G9osHZh9AfePFvzEkn4VyrwqBUqui65_KlloHxzOMsWDTQgTuTTawcpWU8ggHCjLnmD0TmeFT7BOObWGAnHhQZB3h9i0FUUvi5LBsAnNIhjJPJrfwJbZnkEaznXo9QCuJxv5XdRWTr49mGbDXnU8pOki4f9205oDFlNi2LE');"></div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- Sidebar / Profile Summary -->
+<aside class="w-full lg:w-1/3 xl:w-1/4">
+<div class="sticky top-28 bg-surface-light dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
+<div class="relative group">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-slate-700 shadow-lg mb-4">
+<img alt="Profile Picture" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Close up portrait of a young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuBQlFWC2_kfExiXUI23AyPK2OChvMb_GNinjUiox3OZmoW1I_Qtol59zbJEesK-JmAcONiIU2-xT6tIPPJ4cgzZc7NuC9IBs-skP4FjaCisR57p_tLzf-QseBYhFBNtbTQyJ9c6j1RoSvKFdydUg_tapqxe4hoKzq2Uzj7qQvH_4wRSdquDjN4VBVZhHergyl-z5QDQ_Di0qcfPP6k7KNNbsDX6C3MG0HxPIIPd-T58Qii3QgA2S0YatwlMS9HHIN48oGhlUD3k4p"/>
+</div>
+<button class="absolute bottom-4 right-2 bg-primary text-white p-2 rounded-full shadow-md hover:bg-primary/90 transition-colors" title="Edit Photo">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">பிரியா</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-4">priya@example.com</p>
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-bold uppercase tracking-wider mb-6">
+<span class="material-symbols-outlined text-[16px] mr-1">workspace_premium</span>
+                        Premium Member
+                    </div>
+<div class="w-full grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800 pt-6">
+<div class="flex flex-col">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">12</span>
+<span class="text-xs text-slate-500 uppercase tracking-wide">ஆர்டர்கள்</span>
+</div>
+<div class="flex flex-col border-l border-slate-100 dark:border-slate-800">
+<span class="text-2xl font-bold text-slate-900 dark:text-white">245</span>
+<span class="text-xs text-slate-500 uppercase tracking-wide">புள்ளிகள்</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Details Area -->
+<div class="w-full lg:w-2/3 xl:w-3/4 flex flex-col gap-6">
+<!-- Page Title -->
+<div class="mb-2">
+<h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">என் கணக்கு</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">உங்கள் தனிப்பட்ட விவரங்களை நிர்வகிக்கவும்</p>
+</div>
+<!-- Menu Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- My Orders -->
+<a class="group relative overflow-hidden bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-100 dark:border-slate-800 hover:shadow-lg hover:border-primary/30 transition-all duration-300" href="ordertrack.html">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[80px] text-primary">local_shipping</span>
+</div>
+<div class="flex items-center gap-4 mb-3">
+<div class="size-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">package_2</span>
+</div>
+<div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-white">என் ஆர்டர்கள்</h3>
+<p class="text-xs text-slate-500">ஆர்டர் வரலாற்றைக் காண்க</p>
+</div>
+</div>
+<div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/50">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300">2 செயலில் உள்ள ஆர்டர்கள்</span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+</div>
+</a>
+<!-- Address Book -->
+<a class="group relative overflow-hidden bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-100 dark:border-slate-800 hover:shadow-lg hover:border-primary/30 transition-all duration-300" href="profilescr.html">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[80px] text-primary">map</span>
+</div>
+<div class="flex items-center gap-4 mb-3">
+<div class="size-12 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-white">முகவரி</h3>
+<p class="text-xs text-slate-500">டெலிவரி முகவரிகளை நிர்வகிக்க</p>
+</div>
+</div>
+<div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/50">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300">இயல்புநிலை: வீடு</span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+</div>
+</a>
+<!-- Settings -->
+<a class="group relative overflow-hidden bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-100 dark:border-slate-800 hover:shadow-lg hover:border-primary/30 transition-all duration-300" href="profilescr.html">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[80px] text-primary">settings</span>
+</div>
+<div class="flex items-center gap-4 mb-3">
+<div class="size-12 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">tune</span>
+</div>
+<div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-white">அமைப்புகள்</h3>
+<p class="text-xs text-slate-500">கடவுச்சொல் மற்றும் விருப்பங்கள்</p>
+</div>
+</div>
+<div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/50">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300">பாதுகாப்பு &amp; அறிவிப்புகள்</span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+</div>
+</a>
+<!-- Wallet / Payment Methods -->
+<a class="group relative overflow-hidden bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-100 dark:border-slate-800 hover:shadow-lg hover:border-primary/30 transition-all duration-300" href="support.html">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[80px] text-primary">account_balance_wallet</span>
+</div>
+<div class="flex items-center gap-4 mb-3">
+<div class="size-12 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-white">பணம் செலுத்துதல்</h3>
+<p class="text-xs text-slate-500">சேமிக்கப்பட்ட அட்டைகள் &amp; UPI</p>
+</div>
+</div>
+<div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/50">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300">**** 4582</span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:translate-x-1 transition-all">arrow_forward</span>
+</div>
+</a>
+</div>
+<!-- Recent Activity Section (Optional but adds value) -->
+<div class="mt-4 bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h3 class="font-bold text-lg text-slate-900 dark:text-white">சமீபத்திய ஆர்டர்கள்</h3>
+<a class="text-sm text-primary font-medium hover:underline" href="support.html">எல்லாவற்றையும் பார்க்க</a>
+</div>
+<div>
+<!-- Order Item 1 -->
+<div class="flex flex-col sm:flex-row items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800 last:border-0">
+<div class="size-16 rounded-lg bg-slate-200 overflow-hidden shrink-0">
+<img alt="Flower Bouquet" class="w-full h-full object-cover" data-alt="Pink roses bouquet top view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKvpP1lHDDq-wR_VyZc5niBx1qr2LsWt4UZMSaodT2iwGxCl2pdhVqoIJ6f4KceyweTupQ_N6Irqh1P3KusmEQHhv4wg06Enm-7B8WkV-q7CL4BODKN40ewkAvmHzY-QHPreRAuUXGHJcPnd7_aceqRyKf5yzdDZRc5iwBd_g5XO3WIxJ53u3DrBY1X3Pom2GrFEZBi07c7-XHidapYQIrihNyVnuhyJ3irqQkRRGnwVKh-Rcf7qA9YChQbN741rxMevR8BzfogTbM"/>
+</div>
+<div class="flex-1 text-center sm:text-left">
+<h4 class="font-bold text-slate-900 dark:text-white">ரோஜா பூங்கொத்து (Rose Bouquet)</h4>
+<p class="text-sm text-slate-500">ஆர்டர் #4829 • நேற்று</p>
+</div>
+<div class="flex flex-col items-center sm:items-end gap-1">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                    டெலிவரி செய்யப்பட்டது
+                                </span>
+<span class="font-bold text-slate-900 dark:text-white">₹450.00</span>
+</div>
+</div>
+<!-- Order Item 2 -->
+<div class="flex flex-col sm:flex-row items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800 last:border-0">
+<div class="size-16 rounded-lg bg-slate-200 overflow-hidden shrink-0">
+<img alt="Yellow Flowers" class="w-full h-full object-cover" data-alt="Yellow flower arrangement with green leaves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLgoK_LLSe42ZqW37AGNtUzEOpCLJ-_gYrmvsk60jiJ8Ze-h6gEsjA1VBvIg-Kx5XR0cdyR6nPwt0gFnTdwlGS3tIV48pPMZcofHeKkNREnAdoMvs7wT8f9_r806Q4TL9366MnGQGmbduFysclyNprA_p2NoFCX1NwSNoSDZoketjWjgE8sbU_n2U1Pl5mNdFA7VJHNPxYxn_V3st75LHP7SYpP1t6GR47LJOizNuwut3sfWr6cxbC5eTx_IRPww7ORQJLI_XU3Zp0"/>
+</div>
+<div class="flex-1 text-center sm:text-left">
+<h4 class="font-bold text-slate-900 dark:text-white">மஞ்சள் சாமந்தி (Marigold)</h4>
+<p class="text-sm text-slate-500">ஆர்டர் #4801 • 2 நாட்களுக்கு முன்</p>
+</div>
+<div class="flex flex-col items-center sm:items-end gap-1">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                    டெலிவரி செய்யப்பட்டது
+                                </span>
+<span class="font-bold text-slate-900 dark:text-white">₹200.00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Logout Button -->
+<div class="mt-2">
+<button class="w-full flex items-center justify-center gap-2 p-4 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 font-bold transition-colors">
+<span class="material-symbols-outlined">logout</span>
+                        வெளியேறு
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Simple -->
+<footer class="mt-auto py-8 border-t border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark">
+<div class="max-w-[1440px] mx-auto px-4 text-center text-slate-500 text-sm">
+<p>© 2023 மலர் சந்தை. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+</div>
+</footer>
+</body></html>

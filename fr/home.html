@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html lang="ta"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Malar Ulagam - Premium Flower Delivery</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans+Tamil:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6b4cf6",
+                        "primary-light": "#8b72f8", 
+                        "primary-dark": "#4a33b8",
+                        "background-light": "#f9f8fc",
+                        "background-dark": "#131022",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e1b2e",
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "Noto Sans Tamil", "sans-serif"],
+                        body: ["Plus Jakarta Sans", "Noto Sans Tamil", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.25rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem", 
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(107, 76, 246, 0.1)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Tamil', sans-serif;
+        }
+        /* Custom Scrollbar for horizontal scrolling */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top Navigation & Header Area -->
+<div class="relative flex flex-col w-full bg-white/80 dark:bg-surface-dark/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800">
+<header class="layout-container flex items-center justify-between px-6 py-4 mx-auto w-full max-w-7xl">
+<!-- Logo -->
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-10 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-2xl">local_florist</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">மலர் உலகம்</h2>
+</div>
+<!-- Nav Links (Desktop) -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold text-sm" href="home.html">முகப்பு</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="ordertrack.html">ஆர்டர்கள்</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="support.html">ஆதரவு</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="profilescr.html">சுயவிவரம்</a>
+</nav>
+<!-- Cart Button -->
+<button class="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-full transition-all shadow-soft hover:shadow-lg active:scale-95">
+<span class="material-symbols-outlined text-sm">shopping_bag</span>
+<span class="text-sm font-bold">கூடை (2)</span>
+</button>
+</header>
+</div>
+<!-- Main Content -->
+<main class="flex-1 layout-container w-full max-w-7xl mx-auto px-4 md:px-6 py-8">
+<!-- Welcome & Location Section -->
+<section class="mb-8">
+<h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">வணக்கம்! <span class="text-primary">மலர் பிரியரே</span></h1>
+<div class="flex flex-col md:flex-row gap-4 items-stretch">
+<!-- Location Card -->
+<div class="flex-1 bg-white dark:bg-surface-dark p-5 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 flex items-center justify-between group cursor-pointer hover:border-primary/30 transition-all">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">உங்கள் இடம்</p>
+<p class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">அண்ணா நகர், சென்னை</p>
+</div>
+</div>
+<div class="flex items-center gap-1 text-primary font-medium text-sm">
+<span>மாற்று</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="flex-[1.5] relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full h-full min-h-[80px] md:min-h-full pl-12 pr-4 py-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-soft text-slate-900 dark:text-white placeholder:text-slate-400 text-lg outline-none" placeholder="மலர் அல்லது கடை தேடுக..." type="text"/>
+<div class="absolute inset-y-0 right-4 flex items-center">
+<button class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories (Horizontal Scroll) -->
+<section class="mb-10">
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-4 pt-2">
+<!-- Category Item: Jasmine -->
+<button class="flex flex-col items-center gap-3 min-w-[80px] group">
+<div class="size-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 shadow-sm group-hover:shadow-md group-hover:border-primary/50 group-hover:-translate-y-1 transition-all flex items-center justify-center overflow-hidden">
+<div class="text-pink-500 dark:text-pink-400">
+<span class="material-symbols-outlined text-3xl">spa</span>
+</div>
+</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">மல்லிகை</span>
+</button>
+<!-- Category Item: Rose -->
+<button class="flex flex-col items-center gap-3 min-w-[80px] group">
+<div class="size-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 shadow-sm group-hover:shadow-md group-hover:border-primary/50 group-hover:-translate-y-1 transition-all flex items-center justify-center overflow-hidden">
+<div class="text-red-500 dark:text-red-400">
+<span class="material-symbols-outlined text-3xl">local_florist</span>
+</div>
+</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">ரோஜா</span>
+</button>
+<!-- Category Item: Garland -->
+<button class="flex flex-col items-center gap-3 min-w-[80px] group">
+<div class="size-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 shadow-sm group-hover:shadow-md group-hover:border-primary/50 group-hover:-translate-y-1 transition-all flex items-center justify-center overflow-hidden">
+<div class="text-orange-500 dark:text-orange-400">
+<span class="material-symbols-outlined text-3xl">all_inclusive</span>
+</div>
+</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">மாலை</span>
+</button>
+<!-- Category Item: Decoration -->
+<button class="flex flex-col items-center gap-3 min-w-[80px] group">
+<div class="size-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 shadow-sm group-hover:shadow-md group-hover:border-primary/50 group-hover:-translate-y-1 transition-all flex items-center justify-center overflow-hidden">
+<div class="text-purple-500 dark:text-purple-400">
+<span class="material-symbols-outlined text-3xl">celebration</span>
+</div>
+</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">அலங்காரம்</span>
+</button>
+<!-- Category Item: Tulsi -->
+<button class="flex flex-col items-center gap-3 min-w-[80px] group">
+<div class="size-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 shadow-sm group-hover:shadow-md group-hover:border-primary/50 group-hover:-translate-y-1 transition-all flex items-center justify-center overflow-hidden">
+<div class="text-green-600 dark:text-green-500">
+<span class="material-symbols-outlined text-3xl">grass</span>
+</div>
+</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">துளசி</span>
+</button>
+</div>
+</section>
+<!-- Nearby Shops Section -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">அருகிலுள்ள மலர் கடைகள்</h2>
+<a class="text-primary font-semibold text-sm hover:underline" href="shopdts.html">அனைத்தையும் பார்</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Shop Card 1 -->
+<div onclick="window.location.href='shopdts.html'" class="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-soft hover:shadow-glass hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+<!-- Image Area -->
+<div class="h-48 w-full bg-slate-200 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+<img alt="Colorful flower shop display with roses" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Vibrant flower shop front with buckets of colorful roses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOsmAygMg_i0q9RSjmJ61SHMTqqtGvryV9azNyIjCQMyHOcZ-NOHXpYt-dSlkrpnu6kYr0cCfSIMYDj0lS7cL-uq1N3yOTCqC8HARuWuWicoRgNWdQ5gqvgBrnxgvseG_afBCRPlsQhTgTfMU10iGLWB81_MVQDca8FOqmUFFDBwyaBOoOhkAI_IU62Bz_z6vprKNU5rTqvvSHLs8CKZw4NCzILzLBUtxrnwmh6-2BJBxGikWz-CbxuzDBakfGAsGwPfG7MI7wLZN_"/>
+<!-- Offer Badge -->
+<div class="absolute top-4 left-4 z-20 bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_offer</span>
+                            20% சலுகை
+                        </div>
+<!-- Favorite Button -->
+<button class="absolute top-4 right-4 z-20 size-8 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white text-white hover:text-red-500 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+</div>
+<!-- Content Area -->
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">லக்ஷ்மி ஃப்ளவர்ஸ்</h3>
+<div class="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
+                                4.8 <span class="material-symbols-outlined text-[12px] fill-current">star</span>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-1">புதிய ரோஜாக்கள், மல்லிகை மற்றும் மாலைகள் கிடைக்கும்.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">schedule</span>
+                                    20 நிமி
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">distance</span>
+                                    1.2 கி.மீ
+                                </div>
+</div>
+<span class="text-primary font-bold text-sm">ஆர்டர் செய் →</span>
+</div>
+</div>
+</div>
+<!-- Shop Card 2 -->
+<div onclick="window.location.href='shopdts.html'" class="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-soft hover:shadow-glass hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+<!-- Image Area -->
+<div class="h-48 w-full bg-slate-200 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+<img alt="Traditional Indian flower garland shop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Stacked traditional yellow and orange flower garlands" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEyUKUsRSC1kISTfAGrG2il6AO86hFqCntBGep8Chl228S0p7ngrakjlX6XaaUrLFkgboVhxJpn5OUDGP2nDVxxTlQgz9RuSDOSa_nVvybgWsIkRxrRz0IuAk76o7rLGb6aF71-_B_xG-kz9ntxbYjoqKfkQqScd_P_aqPespvOeco1Xz7qgtfynbi5nQbDzMp89RgdzBA0n0qfkWroH8ii61za19F1hJEwUcKlduA010S3YCyH4uzHysQyfShdW3in_Jy15AVMqCA"/>
+<!-- Offer Badge -->
+<div class="absolute top-4 left-4 z-20 bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+                            வேக விநியோகம்
+                        </div>
+<button class="absolute top-4 right-4 z-20 size-8 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white text-white hover:text-red-500 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+</div>
+<!-- Content Area -->
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">அம்மன் மலர் அங்காடி</h3>
+<div class="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
+                                4.5 <span class="material-symbols-outlined text-[12px] fill-current">star</span>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-1">கோயில் மாலைகள் மற்றும் பூஜை பூக்கள் சிறப்பு.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">schedule</span>
+                                    15 நிமி
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">distance</span>
+                                    0.8 கி.மீ
+                                </div>
+</div>
+<span class="text-primary font-bold text-sm">ஆர்டர் செய் →</span>
+</div>
+</div>
+</div>
+<!-- Shop Card 3 -->
+<div onclick="window.location.href='shopdts.html'" class="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-soft hover:shadow-glass hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+<!-- Image Area -->
+<div class="h-48 w-full bg-slate-200 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+<img alt="Modern flower bouquet arrangement" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Elegant pastel flower bouquet wrapped in paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACUczxcKts6xEsgMIrSOvw1brz7zzfmWj1vuSOeHbkvlDy9kzeWMuYOuYvRhCjmGbjyiI8Azu2qG1UAeyjmQXZt9XiLCKF098eyDE_6MOM6o_VL31WvmmLuF7R1Ot4vUbI25VaUFPdNgHd5VXI6EPiUX1sG6_JHZqGxwTQU0ITxQyQ4vr8dkCO0iczKEQNV1LqFnk51JNQoCJsbQlffqZ2hADnZiNHdRITPR-dANbrmurayNbyT_wKkSeZ_jejAPSKo4cXBthpRToV"/>
+<!-- Offer Badge -->
+<div class="absolute top-4 left-4 z-20 bg-purple-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">stars</span>
+                            பிரீமியம்
+                        </div>
+<button class="absolute top-4 right-4 z-20 size-8 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white text-white hover:text-red-500 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+</div>
+<!-- Content Area -->
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">ரோஸ் கார்டன்</h3>
+<div class="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
+                                4.9 <span class="material-symbols-outlined text-[12px] fill-current">star</span>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-1">திருமண அலங்காரம் மற்றும் பரிசு பூங்கொத்துகள்.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">schedule</span>
+                                    35 நிமி
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">distance</span>
+                                    3.5 கி.மீ
+                                </div>
+</div>
+<span class="text-primary font-bold text-sm">ஆர்டர் செய் →</span>
+</div>
+</div>
+</div>
+<!-- Shop Card 4 -->
+<div class="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-soft hover:shadow-glass hover:-translate-y-1 transition-all duration-300 cursor-pointer md:hidden lg:block">
+<!-- Image Area -->
+<div class="h-48 w-full bg-slate-200 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+<img alt="Jasmine flowers in a basket" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Fresh white jasmine flowers piled in a woven basket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYVuj0-89kMM48rJ8-5s8uQrVqQ1mu8njGxaDte9czXqi3qfh_GL7VPc0sBh3-tpt8bq5L6nkfHXBSBtQi7bgxtmWiJ2j2xKNKxkD7ThgNDo_e-HxDOuHzg0MiZbRV3n-KjXbTTQeRUF8hbNb-WxwHIHx3-sMjlmO-XKqyCO9xHDayldJ0XTuFbazlqnOC5sUPUPvX-hJaLptsiIXimJ8B_J3IWf30WNCM1s9zs3HfZa-RyO9_ZA9mORVDsOAfTTAyD44qw_B4qJQq"/>
+<!-- Offer Badge -->
+<div class="absolute top-4 left-4 z-20 bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_offer</span>
+                            10% சலுகை
+                        </div>
+<button class="absolute top-4 right-4 z-20 size-8 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white text-white hover:text-red-500 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+</div>
+<!-- Content Area -->
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">மதுரை மல்லி சென்டர்</h3>
+<div class="flex items-center gap-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-2 py-1 rounded-lg text-xs font-bold">
+                                4.2 <span class="material-symbols-outlined text-[12px] fill-current">star</span>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-1">சுத்தமான மதுரை மல்லிகை மொத்த விற்பனை.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">schedule</span>
+                                    25 நிமி
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-base">distance</span>
+                                    2.1 கி.மீ
+                                </div>
+</div>
+<span class="text-primary font-bold text-sm">ஆர்டர் செய் →</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-white/90 dark:bg-surface-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 py-3 px-6 z-50">
+<div class="flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-primary" href="home.html">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">முகப்பு</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="shopdts.html">
+<span class="material-symbols-outlined">search</span>
+<span class="text-[10px] font-medium">தேடுக</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="ordertrack.html">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-medium">ஆர்டர்கள்</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="profilescr.html">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">சுயவிவரம்</span>
+</a>
+</div>
+</div>
+</body></html>
